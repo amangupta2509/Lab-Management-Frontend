@@ -127,7 +127,7 @@ export default function LoginScreen() {
           </View>
 
           {/* Quick Login (Development Only) */}
-          {__DEV__ && (
+          {/* {__DEV__ && (
             <View style={styles.devSection}>
               <Text style={styles.devTitle}>Quick Login (Dev Only)</Text>
               <TouchableOpacity
@@ -140,7 +140,7 @@ export default function LoginScreen() {
                 <Text style={styles.devButtonText}>Admin Account</Text>
               </TouchableOpacity>
             </View>
-          )}
+          )} */}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
