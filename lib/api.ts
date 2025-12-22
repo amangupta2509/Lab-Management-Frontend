@@ -3,10 +3,12 @@ import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
 // API Configuration
+// API Configuration
 const API_BASE_URL = __DEV__
   ? Platform.select({
-      ios: 'http://localhost:5000/api',
-      android: 'http://10.0.2.2:5000/api',
+      ios: 'http://10.75.127.122:5000/api',      // Your actual IP from Expo logs
+      android: 'http://10.75.127.122:5000/api',  // Your actual IP from Expo logs
+      web: 'http://localhost:5000/api',          // For web development
       default: 'http://localhost:5000/api',
     })
   : 'https://your-production-api.com/api';
@@ -187,5 +189,5 @@ export const adminAPI = {
   toggleUserStatus: (id: number) => api.put(`/admin/users/${id}/toggle-status`),
 };
 
-export { setToken, removeToken, getToken };
+export { getToken, removeToken, setToken };
 export default api;
