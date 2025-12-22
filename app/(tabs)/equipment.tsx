@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
+import { equipmentAPI } from "@/lib/api";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  RefreshControl,
+  FlatList,
   Image,
-} from 'react-native';
-import { router } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { equipmentAPI } from '@/lib/api';
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface Equipment {
   id: number;
@@ -22,7 +22,7 @@ interface Equipment {
   model_number: string;
   serial_number: string;
   equipment_image: string;
-  status: 'available' | 'in_use' | 'maintenance';
+  status: "available" | "in_use" | "maintenance";
 }
 
 export default function EquipmentScreen() {
@@ -30,8 +30,8 @@ export default function EquipmentScreen() {
   const [filteredEquipment, setFilteredEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const loadEquipment = async () => {
     try {
@@ -39,7 +39,7 @@ export default function EquipmentScreen() {
       setEquipment(response.data.equipment);
       setFilteredEquipment(response.data.equipment);
     } catch (error) {
-      console.error('Error loading equipment:', error);
+      console.error("Error loading equipment:", error);
     } finally {
       setIsLoading(false);
       setRefreshing(false);
@@ -63,7 +63,7 @@ export default function EquipmentScreen() {
     }
 
     // Filter by status
-    if (filterStatus !== 'all') {
+    if (filterStatus !== "all") {
       filtered = filtered.filter((item) => item.status === filterStatus);
     }
 
@@ -77,27 +77,27 @@ export default function EquipmentScreen() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'available':
-        return '#4caf50';
-      case 'in_use':
-        return '#ff9800';
-      case 'maintenance':
-        return '#f44336';
+      case "available":
+        return "#4caf50";
+      case "in_use":
+        return "#ff9800";
+      case "maintenance":
+        return "#f44336";
       default:
-        return '#9e9e9e';
+        return "#9e9e9e";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'available':
-        return 'checkmark-circle';
-      case 'in_use':
-        return 'time';
-      case 'maintenance':
-        return 'construct';
+      case "available":
+        return "checkmark-circle";
+      case "in_use":
+        return "time";
+      case "maintenance":
+        return "construct";
       default:
-        return 'help-circle';
+        return "help-circle";
     }
   };
 
@@ -108,8 +108,11 @@ export default function EquipmentScreen() {
     >
       {item.equipment_image ? (
         <Image
-          source={{ uri: `http://YOUR_IP:5000/${item.equipment_image}` }}
+          source={{ uri: `http://10.75.127.122:5000/${item.equipment_image}` }}
           style={styles.equipmentImage}
+          onError={(error) => {
+            console.log("Image load error:", error.nativeEvent.error);
+          }}
         />
       ) : (
         <View style={styles.equipmentImagePlaceholder}>
@@ -120,7 +123,7 @@ export default function EquipmentScreen() {
       <View style={styles.equipmentInfo}>
         <Text style={styles.equipmentName}>{item.name}</Text>
         <Text style={styles.equipmentType}>{item.type}</Text>
-        
+
         {item.model_number && (
           <Text style={styles.equipmentModel}>Model: {item.model_number}</Text>
         )}
@@ -131,8 +134,10 @@ export default function EquipmentScreen() {
             size={16}
             color={getStatusColor(item.status)}
           />
-          <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
-            {item.status.replace('_', ' ')}
+          <Text
+            style={[styles.statusText, { color: getStatusColor(item.status) }]}
+          >
+            {item.status.replace("_", " ")}
           </Text>
         </View>
       </View>
@@ -153,7 +158,12 @@ export default function EquipmentScreen() {
     <View style={styles.container}>
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+        <Ionicons
+          name="search"
+          size={20}
+          color="#666"
+          style={styles.searchIcon}
+        />
         <TextInput
           style={styles.searchInput}
           placeholder="Search equipment..."
@@ -165,37 +175,65 @@ export default function EquipmentScreen() {
       {/* Filter Buttons */}
       <View style={styles.filterContainer}>
         <TouchableOpacity
-          style={[styles.filterButton, filterStatus === 'all' && styles.filterButtonActive]}
-          onPress={() => setFilterStatus('all')}
+          style={[
+            styles.filterButton,
+            filterStatus === "all" && styles.filterButtonActive,
+          ]}
+          onPress={() => setFilterStatus("all")}
         >
-          <Text style={[styles.filterText, filterStatus === 'all' && styles.filterTextActive]}>
+          <Text
+            style={[
+              styles.filterText,
+              filterStatus === "all" && styles.filterTextActive,
+            ]}
+          >
             All
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.filterButton, filterStatus === 'available' && styles.filterButtonActive]}
-          onPress={() => setFilterStatus('available')}
+          style={[
+            styles.filterButton,
+            filterStatus === "available" && styles.filterButtonActive,
+          ]}
+          onPress={() => setFilterStatus("available")}
         >
           <Text
-            style={[styles.filterText, filterStatus === 'available' && styles.filterTextActive]}
+            style={[
+              styles.filterText,
+              filterStatus === "available" && styles.filterTextActive,
+            ]}
           >
             Available
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.filterButton, filterStatus === 'in_use' && styles.filterButtonActive]}
-          onPress={() => setFilterStatus('in_use')}
+          style={[
+            styles.filterButton,
+            filterStatus === "in_use" && styles.filterButtonActive,
+          ]}
+          onPress={() => setFilterStatus("in_use")}
         >
-          <Text style={[styles.filterText, filterStatus === 'in_use' && styles.filterTextActive]}>
+          <Text
+            style={[
+              styles.filterText,
+              filterStatus === "in_use" && styles.filterTextActive,
+            ]}
+          >
             In Use
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.filterButton, filterStatus === 'maintenance' && styles.filterButtonActive]}
-          onPress={() => setFilterStatus('maintenance')}
+          style={[
+            styles.filterButton,
+            filterStatus === "maintenance" && styles.filterButtonActive,
+          ]}
+          onPress={() => setFilterStatus("maintenance")}
         >
           <Text
-            style={[styles.filterText, filterStatus === 'maintenance' && styles.filterTextActive]}
+            style={[
+              styles.filterText,
+              filterStatus === "maintenance" && styles.filterTextActive,
+            ]}
           >
             Maintenance
           </Text>
@@ -208,7 +246,9 @@ export default function EquipmentScreen() {
         renderItem={renderEquipmentCard}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Ionicons name="flask-outline" size={64} color="#ccc" />
@@ -223,23 +263,23 @@ export default function EquipmentScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     margin: 16,
     marginBottom: 8,
     paddingHorizontal: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
   },
   searchIcon: {
     marginRight: 8,
@@ -250,7 +290,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   filterContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: 16,
     marginBottom: 8,
     gap: 8,
@@ -259,46 +299,46 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
   },
   filterButtonActive: {
-    backgroundColor: '#2196F3',
-    borderColor: '#2196F3',
+    backgroundColor: "#2196F3",
+    borderColor: "#2196F3",
   },
   filterText: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   filterTextActive: {
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
   },
   listContainer: {
     padding: 16,
   },
   equipmentCard: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 12,
     marginBottom: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   equipmentImage: {
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   equipmentImagePlaceholder: {
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#f5f5f5",
+    justifyContent: "center",
+    alignItems: "center",
   },
   equipmentInfo: {
     flex: 1,
@@ -306,37 +346,37 @@ const styles = StyleSheet.create({
   },
   equipmentName: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#212121',
+    fontWeight: "600",
+    color: "#212121",
     marginBottom: 4,
   },
   equipmentType: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginBottom: 4,
   },
   equipmentModel: {
     fontSize: 12,
-    color: '#999',
+    color: "#999",
     marginBottom: 8,
   },
   statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: 4,
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
   },
   emptyState: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 48,
   },
   emptyStateText: {
     fontSize: 16,
-    color: '#999',
+    color: "#999",
     marginTop: 16,
   },
 });
