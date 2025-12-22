@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
+import { equipmentAPI } from "@/lib/api";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker"; // ADD THIS IMPORT
+import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  RefreshControl,
   Alert,
-  Modal,
-  ScrollView,
+  FlatList,
   Image,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { equipmentAPI } from '@/lib/api';
+  Modal,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface Equipment {
   id: number;
@@ -25,7 +25,7 @@ interface Equipment {
   model_number: string;
   serial_number: string;
   equipment_image: string;
-  status: 'available' | 'in_use' | 'maintenance' | 'deleted';
+  status: "available" | "in_use" | "maintenance" | "deleted";
 }
 
 export default function AdminEquipmentScreen() {
@@ -33,20 +33,23 @@ export default function AdminEquipmentScreen() {
   const [filteredEquipment, setFilteredEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  );
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    name: '',
-    type: '',
-    description: '',
-    model_number: '',
-    serial_number: '',
-    status: 'available' as Equipment['status'],
+    name: "",
+    type: "",
+    description: "",
+    model_number: "",
+    serial_number: "",
+    status: "available" as Equipment["status"],
   });
 
   const loadEquipment = async () => {
@@ -55,8 +58,8 @@ export default function AdminEquipmentScreen() {
       setEquipment(response.data.equipment);
       setFilteredEquipment(response.data.equipment);
     } catch (error) {
-      console.error('Error loading equipment:', error);
-      Alert.alert('Error', 'Failed to load equipment');
+      console.error("Error loading equipment:", error);
+      Alert.alert("Error", "Failed to load equipment");
     } finally {
       setIsLoading(false);
       setRefreshing(false);
@@ -78,7 +81,7 @@ export default function AdminEquipmentScreen() {
       );
     }
 
-    if (filterStatus !== 'all') {
+    if (filterStatus !== "all") {
       filtered = filtered.filter((item) => item.status === filterStatus);
     }
 
@@ -90,28 +93,59 @@ export default function AdminEquipmentScreen() {
     loadEquipment();
   };
 
+  const handleImagePick = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission Required", "Please grant photo library access");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
   const handleAddEquipment = async () => {
     if (!formData.name || !formData.type) {
-      Alert.alert('Error', 'Please provide equipment name and type');
+      Alert.alert("Error", "Please provide equipment name and type");
       return;
     }
 
     setIsSaving(true);
     try {
       const data = new FormData();
-      data.append('name', formData.name);
-      data.append('type', formData.type);
-      data.append('description', formData.description);
-      data.append('model_number', formData.model_number);
-      data.append('serial_number', formData.serial_number);
+      data.append("name", formData.name);
+      data.append("type", formData.type);
+      data.append("description", formData.description);
+      data.append("model_number", formData.model_number);
+      data.append("serial_number", formData.serial_number);
+
+      // Add image if selected
+      if (selectedImage) {
+        data.append("equipment_image", {
+          uri: selectedImage,
+          type: "image/jpeg",
+          name: "equipment.jpg",
+        } as any);
+      }
 
       await equipmentAPI.create(data);
-      Alert.alert('Success', 'Equipment added successfully');
+      Alert.alert("Success", "Equipment added successfully");
       setShowAddModal(false);
       resetForm();
       loadEquipment();
     } catch (error: any) {
-      Alert.alert('Error', error.response?.data?.message || 'Failed to add equipment');
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Failed to add equipment"
+      );
     } finally {
       setIsSaving(false);
     }
@@ -130,13 +164,16 @@ export default function AdminEquipmentScreen() {
         serial_number: formData.serial_number,
         status: formData.status,
       });
-      Alert.alert('Success', 'Equipment updated successfully');
+      Alert.alert("Success", "Equipment updated successfully");
       setShowEditModal(false);
       setSelectedEquipment(null);
       resetForm();
       loadEquipment();
     } catch (error: any) {
-      Alert.alert('Error', error.response?.data?.message || 'Failed to update equipment');
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Failed to update equipment"
+      );
     } finally {
       setIsSaving(false);
     }
@@ -144,20 +181,23 @@ export default function AdminEquipmentScreen() {
 
   const handleDeleteEquipment = (item: Equipment) => {
     Alert.alert(
-      'Delete Equipment',
+      "Delete Equipment",
       `Are you sure you want to delete "${item.name}"?`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: "Cancel", style: "cancel" },
         {
-          text: 'Delete',
-          style: 'destructive',
+          text: "Delete",
+          style: "destructive",
           onPress: async () => {
             try {
               await equipmentAPI.delete(item.id);
-              Alert.alert('Success', 'Equipment deleted successfully');
+              Alert.alert("Success", "Equipment deleted successfully");
               loadEquipment();
             } catch (error: any) {
-              Alert.alert('Error', error.response?.data?.message || 'Failed to delete equipment');
+              Alert.alert(
+                "Error",
+                error.response?.data?.message || "Failed to delete equipment"
+              );
             }
           },
         },
@@ -170,9 +210,9 @@ export default function AdminEquipmentScreen() {
     setFormData({
       name: item.name,
       type: item.type,
-      description: item.description || '',
-      model_number: item.model_number || '',
-      serial_number: item.serial_number || '',
+      description: item.description || "",
+      model_number: item.model_number || "",
+      serial_number: item.serial_number || "",
       status: item.status,
     });
     setShowEditModal(true);
@@ -180,25 +220,26 @@ export default function AdminEquipmentScreen() {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      type: '',
-      description: '',
-      model_number: '',
-      serial_number: '',
-      status: 'available',
+      name: "",
+      type: "",
+      description: "",
+      model_number: "",
+      serial_number: "",
+      status: "available",
     });
+    setSelectedImage(null);
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'available':
-        return '#4caf50';
-      case 'in_use':
-        return '#ff9800';
-      case 'maintenance':
-        return '#f44336';
+      case "available":
+        return "#4caf50";
+      case "in_use":
+        return "#ff9800";
+      case "maintenance":
+        return "#f44336";
       default:
-        return '#9e9e9e';
+        return "#9e9e9e";
     }
   };
 
@@ -207,7 +248,9 @@ export default function AdminEquipmentScreen() {
       <View style={styles.cardContent}>
         {item.equipment_image ? (
           <Image
-            source={{ uri: `http://YOUR_IP:5000/${item.equipment_image}` }}
+            source={{
+              uri: `http://10.75.127.122:5000/${item.equipment_image}`,
+            }}
             style={styles.equipmentImage}
           />
         ) : (
@@ -220,12 +263,29 @@ export default function AdminEquipmentScreen() {
           <Text style={styles.equipmentName}>{item.name}</Text>
           <Text style={styles.equipmentType}>{item.type}</Text>
           {item.model_number && (
-            <Text style={styles.equipmentModel}>Model: {item.model_number}</Text>
+            <Text style={styles.equipmentModel}>
+              Model: {item.model_number}
+            </Text>
           )}
-          <View style={[styles.statusBadge, { backgroundColor: `${getStatusColor(item.status)}20` }]}>
-            <View style={[styles.statusDot, { backgroundColor: getStatusColor(item.status) }]} />
-            <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
-              {item.status.replace('_', ' ')}
+          <View
+            style={[
+              styles.statusBadge,
+              { backgroundColor: `${getStatusColor(item.status)}20` },
+            ]}
+          >
+            <View
+              style={[
+                styles.statusDot,
+                { backgroundColor: getStatusColor(item.status) },
+              ]}
+            />
+            <Text
+              style={[
+                styles.statusText,
+                { color: getStatusColor(item.status) },
+              ]}
+            >
+              {item.status.replace("_", " ")}
             </Text>
           </View>
         </View>
@@ -240,11 +300,13 @@ export default function AdminEquipmentScreen() {
           <Text style={styles.actionButtonText}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.actionButton, { borderColor: '#f44336' }]}
+          style={[styles.actionButton, { borderColor: "#f44336" }]}
           onPress={() => handleDeleteEquipment(item)}
         >
           <Ionicons name="trash-outline" size={20} color="#f44336" />
-          <Text style={[styles.actionButtonText, { color: '#f44336' }]}>Delete</Text>
+          <Text style={[styles.actionButtonText, { color: "#f44336" }]}>
+            Delete
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -263,7 +325,12 @@ export default function AdminEquipmentScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.searchContainer}>
-          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+          <Ionicons
+            name="search"
+            size={20}
+            color="#666"
+            style={styles.searchIcon}
+          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search equipment..."
@@ -280,15 +347,27 @@ export default function AdminEquipmentScreen() {
       </View>
 
       {/* Filter Tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
-        {['all', 'available', 'in_use', 'maintenance'].map((status) => (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.filterContainer}
+      >
+        {["all", "available", "in_use", "maintenance"].map((status) => (
           <TouchableOpacity
             key={status}
-            style={[styles.filterTab, filterStatus === status && styles.filterTabActive]}
+            style={[
+              styles.filterTab,
+              filterStatus === status && styles.filterTabActive,
+            ]}
             onPress={() => setFilterStatus(status)}
           >
-            <Text style={[styles.filterText, filterStatus === status && styles.filterTextActive]}>
-              {status === 'all' ? 'All' : status.replace('_', ' ')}
+            <Text
+              style={[
+                styles.filterText,
+                filterStatus === status && styles.filterTextActive,
+              ]}
+            >
+              {status === "all" ? "All" : status.replace("_", " ")}
             </Text>
           </TouchableOpacity>
         ))}
@@ -300,7 +379,9 @@ export default function AdminEquipmentScreen() {
         renderItem={renderEquipmentCard}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Ionicons name="flask-outline" size={64} color="#ccc" />
@@ -310,12 +391,16 @@ export default function AdminEquipmentScreen() {
       />
 
       {/* Add/Edit Modal */}
-      <Modal visible={showAddModal || showEditModal} animationType="slide" transparent>
+      <Modal
+        visible={showAddModal || showEditModal}
+        animationType="slide"
+        transparent
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>
-                {showAddModal ? 'Add Equipment' : 'Edit Equipment'}
+                {showAddModal ? "Add Equipment" : "Edit Equipment"}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -330,11 +415,54 @@ export default function AdminEquipmentScreen() {
             </View>
 
             <ScrollView style={styles.modalBody}>
+              {/* Image Upload Section - Only show for Add Modal */}
+              {showAddModal && (
+                <>
+                  <Text style={styles.inputLabel}>
+                    Equipment Image (Optional)
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.imageUploadButton}
+                    onPress={handleImagePick}
+                  >
+                    {selectedImage ? (
+                      <Image
+                        source={{ uri: selectedImage }}
+                        style={styles.previewImage}
+                      />
+                    ) : (
+                      <View style={styles.imageUploadPlaceholder}>
+                        <Ionicons
+                          name="camera-outline"
+                          size={40}
+                          color="#666"
+                        />
+                        <Text style={styles.imageUploadText}>
+                          Tap to select image
+                        </Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+
+                  {selectedImage && (
+                    <TouchableOpacity
+                      style={styles.removeImageButton}
+                      onPress={() => setSelectedImage(null)}
+                    >
+                      <Ionicons name="close-circle" size={20} color="#f44336" />
+                      <Text style={styles.removeImageText}>Remove Image</Text>
+                    </TouchableOpacity>
+                  )}
+                </>
+              )}
+
               <Text style={styles.inputLabel}>Name *</Text>
               <TextInput
                 style={styles.input}
                 value={formData.name}
-                onChangeText={(text) => setFormData({ ...formData, name: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, name: text })
+                }
                 placeholder="Equipment name"
               />
 
@@ -342,7 +470,9 @@ export default function AdminEquipmentScreen() {
               <TextInput
                 style={styles.input}
                 value={formData.type}
-                onChangeText={(text) => setFormData({ ...formData, type: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, type: text })
+                }
                 placeholder="Equipment type"
               />
 
@@ -350,7 +480,9 @@ export default function AdminEquipmentScreen() {
               <TextInput
                 style={styles.input}
                 value={formData.model_number}
-                onChangeText={(text) => setFormData({ ...formData, model_number: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, model_number: text })
+                }
                 placeholder="Model number"
               />
 
@@ -358,7 +490,9 @@ export default function AdminEquipmentScreen() {
               <TextInput
                 style={styles.input}
                 value={formData.serial_number}
-                onChangeText={(text) => setFormData({ ...formData, serial_number: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, serial_number: text })
+                }
                 placeholder="Serial number"
               />
 
@@ -366,7 +500,9 @@ export default function AdminEquipmentScreen() {
               <TextInput
                 style={[styles.input, styles.textArea]}
                 value={formData.description}
-                onChangeText={(text) => setFormData({ ...formData, description: text })}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, description: text })
+                }
                 placeholder="Description"
                 multiline
                 numberOfLines={4}
@@ -376,25 +512,29 @@ export default function AdminEquipmentScreen() {
                 <>
                   <Text style={styles.inputLabel}>Status</Text>
                   <View style={styles.statusSelector}>
-                    {(['available', 'in_use', 'maintenance'] as const).map((status) => (
-                      <TouchableOpacity
-                        key={status}
-                        style={[
-                          styles.statusOption,
-                          formData.status === status && styles.statusOptionActive,
-                        ]}
-                        onPress={() => setFormData({ ...formData, status })}
-                      >
-                        <Text
+                    {(["available", "in_use", "maintenance"] as const).map(
+                      (status) => (
+                        <TouchableOpacity
+                          key={status}
                           style={[
-                            styles.statusOptionText,
-                            formData.status === status && styles.statusOptionTextActive,
+                            styles.statusOption,
+                            formData.status === status &&
+                              styles.statusOptionActive,
                           ]}
+                          onPress={() => setFormData({ ...formData, status })}
                         >
-                          {status.replace('_', ' ')}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
+                          <Text
+                            style={[
+                              styles.statusOptionText,
+                              formData.status === status &&
+                                styles.statusOptionTextActive,
+                            ]}
+                          >
+                            {status.replace("_", " ")}
+                          </Text>
+                        </TouchableOpacity>
+                      )
+                    )}
                   </View>
                 </>
               )}
@@ -413,12 +553,21 @@ export default function AdminEquipmentScreen() {
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.saveButton, isSaving && styles.saveButtonDisabled]}
-                onPress={showAddModal ? handleAddEquipment : handleEditEquipment}
+                style={[
+                  styles.saveButton,
+                  isSaving && styles.saveButtonDisabled,
+                ]}
+                onPress={
+                  showAddModal ? handleAddEquipment : handleEditEquipment
+                }
                 disabled={isSaving}
               >
                 <Text style={styles.saveButtonText}>
-                  {isSaving ? 'Saving...' : showAddModal ? 'Add Equipment' : 'Save Changes'}
+                  {isSaving
+                    ? "Saving..."
+                    : showAddModal
+                    ? "Add Equipment"
+                    : "Save Changes"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -432,24 +581,24 @@ export default function AdminEquipmentScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     gap: 12,
   },
   searchContainer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
     borderRadius: 12,
     paddingHorizontal: 16,
   },
@@ -464,63 +613,63 @@ const styles = StyleSheet.create({
   addButton: {
     width: 44,
     height: 44,
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   filterContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: "#e0e0e0",
   },
   filterTab: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     marginRight: 8,
   },
   filterTabActive: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   filterText: {
     fontSize: 14,
-    color: '#666',
-    textTransform: 'capitalize',
+    color: "#666",
+    textTransform: "capitalize",
   },
   filterTextActive: {
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
   },
   listContainer: {
     padding: 16,
   },
   equipmentCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
   },
   cardContent: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 12,
   },
   equipmentImage: {
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   equipmentImagePlaceholder: {
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#f5f5f5",
+    justifyContent: "center",
+    alignItems: "center",
   },
   equipmentInfo: {
     flex: 1,
@@ -528,24 +677,24 @@ const styles = StyleSheet.create({
   },
   equipmentName: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#212121',
+    fontWeight: "600",
+    color: "#212121",
     marginBottom: 4,
   },
   equipmentType: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginBottom: 4,
   },
   equipmentModel: {
     fontSize: 12,
-    color: '#999',
+    color: "#999",
     marginBottom: 8,
   },
   statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -558,84 +707,84 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'capitalize',
+    fontWeight: "600",
+    textTransform: "capitalize",
   },
   cardActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   actionButton: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#2196F3',
+    borderColor: "#2196F3",
     gap: 4,
   },
   actionButtonText: {
     fontSize: 14,
-    color: '#2196F3',
-    fontWeight: '600',
+    color: "#2196F3",
+    fontWeight: "600",
   },
   emptyState: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 48,
   },
   emptyStateText: {
     fontSize: 16,
-    color: '#999',
+    color: "#999",
     marginTop: 16,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    maxHeight: '90%',
+    maxHeight: "90%",
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: "#e0e0e0",
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#212121',
+    fontWeight: "bold",
+    color: "#212121",
   },
   modalBody: {
     padding: 20,
   },
   inputLabel: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#212121',
+    fontWeight: "600",
+    color: "#212121",
     marginBottom: 8,
     marginTop: 16,
   },
   input: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
   },
   textArea: {
     minHeight: 100,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
   },
   statusSelector: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
   },
   statusOption: {
@@ -643,56 +792,95 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: '#f5f5f5',
-    alignItems: 'center',
+    backgroundColor: "#f5f5f5",
+    alignItems: "center",
   },
   statusOptionActive: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   statusOptionText: {
     fontSize: 14,
-    color: '#666',
-    textTransform: 'capitalize',
+    color: "#666",
+    textTransform: "capitalize",
   },
   statusOptionTextActive: {
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
   },
   modalFooter: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
+    borderTopColor: "#e0e0e0",
   },
   cancelButton: {
     flex: 1,
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
   },
   cancelButtonText: {
     fontSize: 16,
-    color: '#666',
-    fontWeight: '600',
+    color: "#666",
+    fontWeight: "600",
   },
   saveButton: {
     flex: 1,
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 12,
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   saveButtonDisabled: {
-    backgroundColor: '#90caf9',
+    backgroundColor: "#90caf9",
   },
   saveButtonText: {
     fontSize: 16,
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
+  },
+  imageUploadButton: {
+    width: "100%",
+    height: 200,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+    borderStyle: "dashed",
+    overflow: "hidden",
+    marginBottom: 16,
+  },
+  imageUploadPlaceholder: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
+  imageUploadText: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 8,
+  },
+  previewImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  removeImageButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    marginBottom: 16,
+    gap: 6,
+  },
+  removeImageText: {
+    fontSize: 14,
+    color: "#f44336",
+    fontWeight: "600",
   },
 });
