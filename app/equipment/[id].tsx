@@ -1,4 +1,4 @@
-import { bookingAPI, equipmentAPI } from "@/lib/api";
+import { bookingAPI, equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
@@ -32,6 +32,8 @@ export default function EquipmentDetailScreen() {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Add state for booked slots
+  const [bookedSlots, setBookedSlots] = useState<any[]>([]);
 
   useEffect(() => {
     loadEquipment();
@@ -49,11 +51,24 @@ export default function EquipmentDetailScreen() {
     }
   };
 
+  // Add function to load available slots
+  const loadAvailableSlots = async (date: Date) => {
+    try {
+      const dateStr = format(date, "yyyy-MM-dd");
+      const response = await bookingAPI.getAvailableSlots(Number(id), dateStr);
+      setBookedSlots(response.data.bookedSlots);
+    } catch (error) {
+      console.error("Error loading slots:", error);
+    }
+  };
+
+  // Update handleBookNow
   const handleBookNow = () => {
     if (equipment?.status !== "available") {
       Alert.alert("Unavailable", "This equipment is not available for booking");
       return;
     }
+    loadAvailableSlots(bookingData.date);
     setShowBookingModal(true);
   };
 
@@ -145,9 +160,7 @@ export default function EquipmentDetailScreen() {
         {/* Header Image */}
         {equipment.equipment_image ? (
           <Image
-            source={{
-              uri: `http://10.75.127.122:5000/${equipment.equipment_image}`,
-            }}
+            source={{ uri: getImageUrl(equipment.equipment_image)! }}
             style={styles.headerImage}
           />
         ) : (
@@ -263,9 +276,27 @@ export default function EquipmentDetailScreen() {
                   minimumDate={new Date()}
                   onChange={(event, date) => {
                     setShowDatePicker(false);
-                    if (date) setBookingData({ ...bookingData, date });
+                    if (date) {
+                      setBookingData({ ...bookingData, date });
+                      loadAvailableSlots(date);
+                    }
                   }}
                 />
+              )}
+
+              {/* Display booked slots */}
+              {bookedSlots.length > 0 && (
+                <View style={styles.bookedSlotsContainer}>
+                  <Text style={styles.bookedSlotsTitle}>Already Booked:</Text>
+                  {bookedSlots.map((slot, index) => (
+                    <View key={index} style={styles.bookedSlot}>
+                      <Ionicons name="time-outline" size={16} color="#f44336" />
+                      <Text style={styles.bookedSlotText}>
+                        {slot.start_time} - {slot.end_time}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
               )}
 
               {/* Start Time */}
@@ -537,6 +568,30 @@ const styles = StyleSheet.create({
   dateButtonText: {
     fontSize: 16,
     color: "#212121",
+  },
+  // Add booked slots styles
+  bookedSlotsContainer: {
+    backgroundColor: "#fff3e0",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    marginTop: 16,
+  },
+  bookedSlotsTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#f57c00",
+    marginBottom: 8,
+  },
+  bookedSlot: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 4,
+  },
+  bookedSlotText: {
+    fontSize: 14,
+    color: "#666",
   },
   textArea: {
     backgroundColor: "#f5f5f5",
