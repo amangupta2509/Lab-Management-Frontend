@@ -1,6 +1,7 @@
-import { equipmentAPI } from "@/lib/api";
+import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker"; // ADD THIS IMPORT
+import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -42,6 +43,7 @@ export default function AdminEquipmentScreen() {
   );
   const [isSaving, setIsSaving] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageChanged, setImageChanged] = useState(false); // Track if image was changed
 
   const [formData, setFormData] = useState({
     name: "",
@@ -101,7 +103,7 @@ export default function AdminEquipmentScreen() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,
@@ -109,6 +111,7 @@ export default function AdminEquipmentScreen() {
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
+      setImageChanged(true);
     }
   };
 
@@ -129,7 +132,7 @@ export default function AdminEquipmentScreen() {
 
       // Add image if selected
       if (selectedImage) {
-        data.append("equipment_image", {
+        data.append("image", {
           uri: selectedImage,
           type: "image/jpeg",
           name: "equipment.jpg",
@@ -156,14 +159,25 @@ export default function AdminEquipmentScreen() {
 
     setIsSaving(true);
     try {
-      await equipmentAPI.update(selectedEquipment.id, {
-        name: formData.name,
-        type: formData.type,
-        description: formData.description,
-        model_number: formData.model_number,
-        serial_number: formData.serial_number,
-        status: formData.status,
-      });
+      // Use FormData for update to support image upload
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("type", formData.type);
+      data.append("description", formData.description);
+      data.append("model_number", formData.model_number);
+      data.append("serial_number", formData.serial_number);
+      data.append("status", formData.status);
+
+      // Add new image only if it was changed
+      if (imageChanged && selectedImage) {
+        data.append("image", {
+          uri: selectedImage,
+          type: "image/jpeg",
+          name: "equipment.jpg",
+        } as any);
+      }
+
+      await equipmentAPI.update(selectedEquipment.id, data);
       Alert.alert("Success", "Equipment updated successfully");
       setShowEditModal(false);
       setSelectedEquipment(null);
@@ -215,6 +229,13 @@ export default function AdminEquipmentScreen() {
       serial_number: item.serial_number || "",
       status: item.status,
     });
+    // Set existing image for preview
+    if (item.equipment_image) {
+      setSelectedImage(`http://10.75.127.122:5000/${item.equipment_image}`);
+    } else {
+      setSelectedImage(null);
+    }
+    setImageChanged(false); // Reset image changed flag
     setShowEditModal(true);
   };
 
@@ -228,6 +249,7 @@ export default function AdminEquipmentScreen() {
       status: "available",
     });
     setSelectedImage(null);
+    setImageChanged(false);
   };
 
   const getStatusColor = (status: string) => {
@@ -245,12 +267,13 @@ export default function AdminEquipmentScreen() {
 
   const renderEquipmentCard = ({ item }: { item: Equipment }) => (
     <View style={styles.equipmentCard}>
-      <View style={styles.cardContent}>
+      <TouchableOpacity
+        style={styles.cardContent}
+        onPress={() => router.push(`/equipment/${item.id}/analytics` as any)}
+      >
         {item.equipment_image ? (
           <Image
-            source={{
-              uri: `http://10.75.127.122:5000/${item.equipment_image}`,
-            }}
+            source={{ uri: getImageUrl(item.equipment_image)! }}
             style={styles.equipmentImage}
           />
         ) : (
@@ -289,21 +312,23 @@ export default function AdminEquipmentScreen() {
             </Text>
           </View>
         </View>
-      </View>
+
+        <Ionicons name="chevron-forward" size={24} color="#ccc" />
+      </TouchableOpacity>
 
       <View style={styles.cardActions}>
         <TouchableOpacity
           style={styles.actionButton}
           onPress={() => openEditModal(item)}
         >
-          <Ionicons name="create-outline" size={20} color="#2196F3" />
+          <Ionicons name="create-outline" size={15} color="#000000ff" />
           <Text style={styles.actionButtonText}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.actionButton, { borderColor: "#f44336" }]}
           onPress={() => handleDeleteEquipment(item)}
         >
-          <Ionicons name="trash-outline" size={20} color="#f44336" />
+          <Ionicons name="trash-outline" size={15} color="#f44336" />
           <Text style={[styles.actionButtonText, { color: "#f44336" }]}>
             Delete
           </Text>
@@ -322,70 +347,65 @@ export default function AdminEquipmentScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.searchContainer}>
-          <Ionicons
-            name="search"
-            size={20}
-            color="#666"
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search equipment..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => setShowAddModal(true)}
-        >
-          <Ionicons name="add" size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Filter Tabs */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.filterContainer}
-      >
-        {["all", "available", "in_use", "maintenance"].map((status) => (
-          <TouchableOpacity
-            key={status}
-            style={[
-              styles.filterTab,
-              filterStatus === status && styles.filterTabActive,
-            ]}
-            onPress={() => setFilterStatus(status)}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                filterStatus === status && styles.filterTextActive,
-              ]}
-            >
-              {status === "all" ? "All" : status.replace("_", " ")}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
       {/* Equipment List */}
       <FlatList
         data={filteredEquipment}
         renderItem={renderEquipmentCard}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Ionicons name="flask-outline" size={64} color="#ccc" />
-            <Text style={styles.emptyStateText}>No equipment found</Text>
+        contentContainerStyle={styles.listContainer}
+        ListHeaderComponent={
+          <View>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.searchContainer}>
+                <Ionicons name="search" size={20} color="#666" />
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Search equipment..."
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => setShowAddModal(true)}
+              >
+                <Ionicons name="add" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Filter Tabs */}
+            <View style={styles.filterWrapper}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.filterContent}
+                style={styles.filterContainer}
+              >
+                {["all", "available", "in_use", "maintenance"].map((status) => (
+                  <TouchableOpacity
+                    key={status}
+                    style={[
+                      styles.filterTab,
+                      filterStatus === status && styles.filterTabActive,
+                    ]}
+                    onPress={() => setFilterStatus(status)}
+                  >
+                    <Text
+                      style={[
+                        styles.filterText,
+                        filterStatus === status && styles.filterTextActive,
+                      ]}
+                    >
+                      {status === "all" ? "All" : status.replace("_", " ")}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
           </View>
         }
       />
@@ -413,47 +433,46 @@ export default function AdminEquipmentScreen() {
                 <Ionicons name="close" size={24} color="#212121" />
               </TouchableOpacity>
             </View>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={styles.modalScrollContent}
+            >
+              {/* Image Upload Section - Show for both Add and Edit */}
+              <Text style={styles.inputLabel}>Equipment Image</Text>
+              <TouchableOpacity
+                style={styles.imageUploadButton}
+                onPress={handleImagePick}
+              >
+                {selectedImage ? (
+                  <Image
+                    source={{ uri: selectedImage }}
+                    style={styles.previewImage}
+                  />
+                ) : (
+                  <View style={styles.imageUploadPlaceholder}>
+                    <Ionicons name="camera-outline" size={40} color="#666" />
+                    <Text style={styles.imageUploadText}>
+                      {showEditModal
+                        ? "Tap to change image"
+                        : "Tap to select image"}
+                    </Text>
+                  </View>
+                )}
+              </TouchableOpacity>
 
-            <ScrollView style={styles.modalBody}>
-              {/* Image Upload Section - Only show for Add Modal */}
-              {showAddModal && (
-                <>
-                  <Text style={styles.inputLabel}>
-                    Equipment Image (Optional)
+              {showEditModal && imageChanged && (
+                <View style={styles.imageChangeNotice}>
+                  <Ionicons
+                    name="information-circle"
+                    size={16}
+                    color="#2196F3"
+                  />
+                  <Text style={styles.imageChangeNoticeText}>
+                    {selectedImage
+                      ? "New image will be uploaded"
+                      : "Current image will be kept"}
                   </Text>
-                  <TouchableOpacity
-                    style={styles.imageUploadButton}
-                    onPress={handleImagePick}
-                  >
-                    {selectedImage ? (
-                      <Image
-                        source={{ uri: selectedImage }}
-                        style={styles.previewImage}
-                      />
-                    ) : (
-                      <View style={styles.imageUploadPlaceholder}>
-                        <Ionicons
-                          name="camera-outline"
-                          size={40}
-                          color="#666"
-                        />
-                        <Text style={styles.imageUploadText}>
-                          Tap to select image
-                        </Text>
-                      </View>
-                    )}
-                  </TouchableOpacity>
-
-                  {selectedImage && (
-                    <TouchableOpacity
-                      style={styles.removeImageButton}
-                      onPress={() => setSelectedImage(null)}
-                    >
-                      <Ionicons name="close-circle" size={20} color="#f44336" />
-                      <Text style={styles.removeImageText}>Remove Image</Text>
-                    </TouchableOpacity>
-                  )}
-                </>
+                </View>
               )}
 
               <Text style={styles.inputLabel}>Name *</Text>
@@ -566,8 +585,8 @@ export default function AdminEquipmentScreen() {
                   {isSaving
                     ? "Saving..."
                     : showAddModal
-                    ? "Add Equipment"
-                    : "Save Changes"}
+                      ? "Add Equipment"
+                      : "Save Changes"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -593,13 +612,14 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
     gap: 12,
+    marginBottom: 4,
   },
   searchContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f5f5f5",
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 16,
   },
   searchIcon: {
@@ -613,18 +633,24 @@ const styles = StyleSheet.create({
   addButton: {
     width: 44,
     height: 44,
-    backgroundColor: "#2196F3",
+    backgroundColor: "#ff0000ff",
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
   },
   filterContainer: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    borderRadius: 10,
+    backgroundColor: "#ffffffff",
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0",
   },
+
+  filterContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    alignItems: "center",
+  },
+
   filterTab: {
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -633,7 +659,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   filterTabActive: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#ff0000ff",
   },
   filterText: {
     fontSize: 14,
@@ -645,7 +671,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   listContainer: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
   equipmentCard: {
     backgroundColor: "#fff",
@@ -675,6 +702,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 12,
   },
+  filterWrapper: {
+    paddingBottom: 8,
+  },
   equipmentName: {
     fontSize: 16,
     fontWeight: "600",
@@ -697,7 +727,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: 5,
     gap: 6,
   },
   statusDot: {
@@ -722,12 +752,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#2196F3",
+    borderColor: "#000000ff",
     gap: 4,
   },
   actionButtonText: {
     fontSize: 14,
-    color: "#2196F3",
+    color: "#000000ff",
     fontWeight: "600",
   },
   emptyState: {
@@ -763,8 +793,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#212121",
   },
-  modalBody: {
+
+  modalScrollContent: {
     padding: 20,
+    paddingBottom: 32,
   },
   inputLabel: {
     fontSize: 14,
@@ -796,7 +828,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   statusOptionActive: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#ff0000ff",
   },
   statusOptionText: {
     fontSize: 14,
@@ -834,10 +866,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
-    backgroundColor: "#2196F3",
+    backgroundColor: "#f32121ff",
   },
   saveButtonDisabled: {
-    backgroundColor: "#90caf9",
+    backgroundColor: "#ff0000ff",
   },
   saveButtonText: {
     fontSize: 16,
@@ -882,5 +914,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#f44336",
     fontWeight: "600",
+  },
+  imageChangeNotice: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E3F2FD",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    gap: 8,
+  },
+  imageChangeNoticeText: {
+    fontSize: 13,
+    color: "#1976D2",
+    flex: 1,
   },
 });
