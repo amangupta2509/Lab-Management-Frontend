@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react';
+import { adminAPI } from "@/lib/api";
+import { useAuthStore } from "@/store/authStore";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
   ActivityIndicator,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useAuthStore } from '@/store/authStore';
-import { adminAPI } from '@/lib/api';
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+/* ================= TYPES ================= */
 
 interface DashboardStats {
   totalUsers: number;
@@ -19,24 +22,37 @@ interface DashboardStats {
   availableEquipment: number;
   pendingBookings: number;
   todayBookings: number;
-  activeSessions: number;
-  totalUsageHours: number;
 }
+
+interface EquipmentUsage {
+  id: number;
+  name: string;
+  utilization_percent: number;
+}
+
+/* ================= SCREEN ================= */
 
 export default function AdminDashboardScreen() {
   const { user } = useAuthStore();
+  const insets = useSafeAreaInsets();
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [usage, setUsage] = useState<EquipmentUsage[]>([]);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const loadDashboard = async () => {
     try {
-      const response = await adminAPI.getDashboard();
-      setStats(response.data.stats);
-    } catch (error) {
-      console.error('Error loading dashboard:', error);
+      const [statsRes, usageRes] = await Promise.all([
+        adminAPI.getDashboard(),
+        adminAPI.getMachineUtilizationAnalytics({ days: 30 }),
+      ]);
+
+      setStats(statsRes.data.stats);
+      setUsage(usageRes.data.machines || []);
+    } catch (e) {
+      console.error("Dashboard load error:", e);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
       setRefreshing(false);
     }
   };
@@ -45,15 +61,10 @@ export default function AdminDashboardScreen() {
     loadDashboard();
   }, []);
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadDashboard();
-  };
-
-  if (isLoading) {
+  if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2196F3" />
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#EF4444" />
       </View>
     );
   }
@@ -61,240 +72,226 @@ export default function AdminDashboardScreen() {
   return (
     <ScrollView
       style={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      contentContainerStyle={{ paddingBottom: 24 }}
     >
-      {/* Welcome Header */}
+      {/* ================= HEADER ================= */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.welcomeText}>Welcome back, Admin</Text>
-          <Text style={styles.userName}>{user?.name}</Text>
+          <Text style={styles.welcome}>Welcome back,</Text>
+          <Text style={styles.name}>{user?.name}</Text>
         </View>
-        <View style={styles.adminBadge}>
-          <Ionicons name="shield-checkmark" size={20} color="#2196F3" />
-          <Text style={styles.adminBadgeText}>ADMIN</Text>
-        </View>
+        <Ionicons name="notifications-outline" size={24} color="#EF4444" />
       </View>
 
-      {/* Stats Grid */}
-      <View style={styles.statsSection}>
-        <Text style={styles.sectionTitle}>Overview</Text>
-        <View style={styles.statsGrid}>
-          <View style={[styles.statCard, { backgroundColor: '#e3f2fd' }]}>
-            <Ionicons name="people" size={32} color="#2196F3" />
-            <Text style={styles.statValue}>{stats?.totalUsers || 0}</Text>
-            <Text style={styles.statLabel}>Total Users</Text>
-            <Text style={styles.statSubtext}>
-              {stats?.activeUsers || 0} active
-            </Text>
-          </View>
-
-          <View style={[styles.statCard, { backgroundColor: '#f3e5f5' }]}>
-            <Ionicons name="flask" size={32} color="#9c27b0" />
-            <Text style={styles.statValue}>{stats?.totalEquipment || 0}</Text>
-            <Text style={styles.statLabel}>Equipment</Text>
-            <Text style={styles.statSubtext}>
-              {stats?.availableEquipment || 0} available
-            </Text>
-          </View>
-
-          <View style={[styles.statCard, { backgroundColor: '#fff3e0' }]}>
-            <Ionicons name="calendar" size={32} color="#ff9800" />
-            <Text style={styles.statValue}>{stats?.pendingBookings || 0}</Text>
-            <Text style={styles.statLabel}>Pending</Text>
-            <Text style={styles.statSubtext}>
-              {stats?.todayBookings || 0} today
-            </Text>
-          </View>
-
-          <View style={[styles.statCard, { backgroundColor: '#e8f5e9' }]}>
-            <Ionicons name="time" size={32} color="#4caf50" />
-            <Text style={styles.statValue}>{stats?.activeSessions || 0}</Text>
-            <Text style={styles.statLabel}>Active Now</Text>
-            <Text style={styles.statSubtext}>
-              {stats?.totalUsageHours || 0}h total
-            </Text>
-          </View>
-        </View>
+      {/* ================= STATS ================= */}
+      <View style={styles.grid}>
+        <StatCard
+          icon="people-outline"
+          label="Active Users"
+          value={stats?.activeUsers ?? 0}
+        />
+        <StatCard
+          icon="calendar-outline"
+          label="Pending"
+          value={stats?.pendingBookings ?? 0}
+          urgent
+        />
+        <StatCard
+          icon="flask-outline"
+          label="Equipment"
+          value={stats?.totalEquipment ?? 0}
+        />
+        <StatCard
+          icon="book-outline"
+          label="Bookings Today"
+          value={stats?.todayBookings ?? 0}
+        />
       </View>
 
-      {/* Quick Actions */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-        <View style={styles.actionsGrid}>
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, { backgroundColor: '#e3f2fd' }]}>
-              <Ionicons name="flask-outline" size={24} color="#2196F3" />
-            </View>
-            <Text style={styles.actionText}>Add Equipment</Text>
-          </TouchableOpacity>
+      {/* ================= QUICK ACTIONS ================= */}
+      <Text style={styles.section}>Quick Actions</Text>
+      <View style={styles.actionsGrid}>
+        <Action
+          icon="checkmark-circle"
+          label="Approve"
+          onPress={() =>
+            router.push({
+              pathname: "/(admin)/bookings",
+              params: { status: "pending" },
+            })
+          }
+        />
 
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, { backgroundColor: '#fff3e0' }]}>
-              <Ionicons name="checkmark-circle-outline" size={24} color="#ff9800" />
-            </View>
-            <Text style={styles.actionText}>Review Bookings</Text>
-          </TouchableOpacity>
+        <Action
+          icon="add-circle"
+          label="Add Equipment"
+          onPress={() => router.push("/(admin)/equipment")}
+        />
 
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, { backgroundColor: '#f3e5f5' }]}>
-              <Ionicons name="people-outline" size={24} color="#9c27b0" />
-            </View>
-            <Text style={styles.actionText}>Manage Users</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, { backgroundColor: '#e8f5e9' }]}>
-              <Ionicons name="bar-chart-outline" size={24} color="#4caf50" />
-            </View>
-            <Text style={styles.actionText}>View Reports</Text>
-          </TouchableOpacity>
-        </View>
+        <Action icon="document-text" label="Reports" />
+        <Action icon="cube" label="Inventory" />
       </View>
 
-      {/* Recent Activity */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAllText}>View All</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.emptyState}>
-          <Ionicons name="list-outline" size={48} color="#ccc" />
-          <Text style={styles.emptyStateText}>No recent activity</Text>
-        </View>
-      </View>
+      {/* ================= EQUIPMENT USAGE ================= */}
+      <Text style={styles.section}>Equipment Usage</Text>
+
+      {usage.length === 0 ? (
+        <Text style={styles.emptyText}>No usage data available</Text>
+      ) : (
+        usage.map((item) => (
+          <Usage
+            key={item.id}
+            label={item.name}
+            value={item.utilization_percent}
+          />
+        ))
+      )}
     </ScrollView>
   );
 }
 
+/* ================= COMPONENTS ================= */
+
+const StatCard = ({ icon, label, value, urgent }: any) => (
+  <View style={styles.card}>
+    <View style={styles.cardTop}>
+      <Ionicons name={icon} size={20} color="#EF4444" />
+      {urgent && <Text style={styles.urgent}>Urgent</Text>}
+    </View>
+    <Text style={styles.cardValue}>{value}</Text>
+    <Text style={styles.cardLabel}>{label}</Text>
+  </View>
+);
+
+const Action = ({ icon, label, onPress }: any) => (
+  <TouchableOpacity style={styles.action} onPress={onPress} activeOpacity={0.7}>
+    <Ionicons name={icon} size={28} color="#EF4444" />
+    <Text style={styles.actionText}>{label}</Text>
+  </TouchableOpacity>
+);
+
+const Usage = ({ label, value }: any) => (
+  <View style={styles.usageContainer}>
+    <View style={styles.usageRow}>
+      <Text style={styles.usageLabel}>{label}</Text>
+      <Text style={styles.usageValue}>{value}%</Text>
+    </View>
+    <View style={styles.barBg}>
+      <View style={[styles.barFill, { width: `${value}%` }]} />
+    </View>
+  </View>
+);
+
+/* ================= STYLES ================= */
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  welcomeText: {
-    fontSize: 14,
-    color: '#666',
-  },
-  userName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#212121',
-  },
-  adminBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#e3f2fd',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    gap: 4,
-  },
-  adminBadgeText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#2196F3',
-  },
-  statsSection: {
+    backgroundColor: "#F8FAFC",
     padding: 16,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#212121',
-    marginBottom: 16,
+
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 24,
+  },
+  welcome: { color: "#6B7280" },
+  name: { color: "#111827", fontSize: 22, fontWeight: "700" },
+
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 12,
   },
-  statCard: {
-    flex: 1,
-    minWidth: '45%',
-    backgroundColor: '#fff',
-    borderRadius: 16,
+  card: {
+    width: "48%",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
     padding: 16,
-    alignItems: 'center',
+    elevation: 3,
   },
-  statValue: {
+  cardTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  urgent: {
+    backgroundColor: "#FEE2E2",
+    color: "#EF4444",
+    textAlign: "center",
+    textAlignVertical: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    fontSize: 12,
+    fontWeight: "600",
+  },
+
+  cardValue: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#212121',
+    fontWeight: "700",
+    color: "#111827",
     marginTop: 8,
   },
-  statLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  statSubtext: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 2,
-  },
+  cardLabel: { color: "#6B7280" },
+
   section: {
-    padding: 16,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  viewAllText: {
-    fontSize: 14,
-    color: '#2196F3',
-    fontWeight: '600',
-  },
-  actionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  actionCard: {
-    flex: 1,
-    minWidth: '45%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-  },
-  actionIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#111827",
+    marginTop: 16,
     marginBottom: 12,
   },
+
+  /* QUICK ACTIONS 2x2 */
+  actionsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+  },
+  action: {
+    width: "48%",
+    backgroundColor: "#ffffffff",
+    borderRadius: 16,
+    padding: 20,
+    alignItems: "center",
+    elevation: 2,
+  },
   actionText: {
-    fontSize: 14,
-    color: '#212121',
-    textAlign: 'center',
+    marginTop: 10,
+    color: "#374151",
+    fontWeight: "600",
   },
-  emptyState: {
-    alignItems: 'center',
-    padding: 32,
-    backgroundColor: '#fff',
-    borderRadius: 12,
+
+  /* USAGE */
+  usageContainer: { marginBottom: 16 },
+  usageRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  emptyStateText: {
-    fontSize: 14,
-    color: '#999',
-    marginTop: 12,
+  usageLabel: { color: "#374151" },
+  usageValue: { color: "#EF4444", fontWeight: "600" },
+  barBg: {
+    height: 8,
+    backgroundColor: "#ffffffff",
+    borderRadius: 6,
+    marginTop: 6,
+  },
+  barFill: {
+    height: 8,
+    backgroundColor: "#ff0000ff",
+    borderRadius: 6,
+  },
+
+  emptyText: {
+    color: "#9CA3AF",
+    fontStyle: "italic",
+    marginBottom: 4,
   },
 });
