@@ -1,46 +1,47 @@
-import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { useEffect } from 'react';
-import { router } from 'expo-router';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from "@/store/authStore";
+import { Ionicons } from "@expo/vector-icons";
+import { router, Tabs } from "expo-router";
+import { useEffect } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const { isAuthenticated, user } = useAuthStore();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace('/(auth)/login');
-    } else if (user?.role === 'admin') {
-      router.replace('/(admin)');
+      router.replace("/(auth)/login");
+    } else if (user?.role === "admin") {
+      router.replace("/(admin)");
     }
   }, [isAuthenticated, user]);
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#2196F3',
-        tabBarInactiveTintColor: '#9e9e9e',
+        tabBarActiveTintColor: "#2196F3",
+        tabBarInactiveTintColor: "#9e9e9e",
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
           borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
-          height: 60,
-          paddingBottom: 8,
+          borderTopColor: "#e0e0e0",
+          height: 100 + insets.bottom, // Add bottom inset for devices with gesture navigation
+          paddingBottom: insets.bottom || 8, // Use inset or default padding
           paddingTop: 8,
         },
         headerStyle: {
-          backgroundColor: '#2196F3',
+          backgroundColor: "#2196F3",
         },
-        headerTintColor: '#fff',
+        headerTintColor: "#fff",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Dashboard',
+          title: "Dashboard",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -49,7 +50,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="equipment"
         options={{
-          title: 'Equipment',
+          title: "Equipment",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="flask" size={size} color={color} />
           ),
@@ -58,16 +59,25 @@ export default function TabLayout() {
       <Tabs.Screen
         name="bookings"
         options={{
-          title: 'Bookings',
+          title: "Bookings",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
+        name="sessions"
+        options={{
+          title: "Sessions",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="time" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="activity"
         options={{
-          title: 'Activity',
+          title: "Activity",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bar-chart" size={size} color={color} />
           ),
@@ -76,7 +86,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
+          title: "Profile",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
           ),
