@@ -103,7 +103,12 @@ export default function AdminTabs() {
         />
 
         {/* Hide the inventory_layout from tabs */}
-        
+        <Tabs.Screen
+          name="inventory"
+          options={{
+            href: null, // This hides it from the tab bar
+          }}
+        />
       </Tabs>
     </>
   );
