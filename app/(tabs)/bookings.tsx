@@ -1,4 +1,12 @@
-id: number;
+import { useState, useEffect } from "react";
+
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { bookingAPI } from "@/lib/api";
+import { format } from "date-fns";
+
+interface Booking {
+  id: number;
   equipment_name: string;
   equipment_type: string;
   booking_date: string;
