@@ -2,29 +2,8 @@ import { adminAPI } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import { format, isValid } from "date-fns";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: "user" | "admin";
-  phone?: string;
-  department?: string;
-  created_at: string;
-  is_active: boolean;
-}
+
 
 export default function AdminUsersScreen() {
   const [users, setUsers] = useState<User[]>([]);
