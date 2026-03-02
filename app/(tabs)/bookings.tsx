@@ -5,7 +5,16 @@ import {
 
   Alert,
 } from "react-native";
-_time: string;
+import { Ionicons } from "@expo/vector-icons";
+import { bookingAPI } from "@/lib/api";
+import { format } from "date-fns";
+
+interface Booking {
+  id: number;
+  equipment_name: string;
+  equipment_type: string;
+  booking_date: string;
+  start_time: string;
   end_time: string;
   purpose: string;
   status: "pending" | "approved" | "rejected" | "cancelled" | "completed";
