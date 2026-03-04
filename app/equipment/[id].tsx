@@ -5,7 +5,18 @@ import { format } from "date-fns";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 
-
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function EquipmentDetailScreen() {
   const { id } = useLocalSearchParams();
