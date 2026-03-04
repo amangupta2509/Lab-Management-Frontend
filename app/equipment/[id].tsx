@@ -7,7 +7,15 @@ import { useEffect, useState } from "react";
 
 
 
-eval new Date(),
+export default function EquipmentDetailScreen() {
+  const { id } = useLocalSearchParams();
+  const [equipment, setEquipment] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [bookingData, setBookingData] = useState({
+    date: new Date(),
+    startTime: new Date(),
+    endTime: new Date(),
     purpose: "",
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
