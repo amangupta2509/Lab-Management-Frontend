@@ -2,26 +2,6 @@ import { bookingAPI, usageAPI } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import { format, parseISO, isToday, parse } from "date-fns";
 ime: string;
-
-interface UsageSession {
-  id: number;
-  booking_id: number;
-  equipment_name: string;
-  equipment_type: string;
-  booking_date: string;
-  start_time: string;
-  end_time: string | null;
-  duration_minutes: number | null;
-  notes: string;
-}
-
-interface AvailableBooking {
-  id: number;
-  equipment_name: string;
-  equipment_type: string;
-  booking_date: string;
-  start_time: string;
-  end_time: string;
 }
 
 export default function SessionsScreen() {
