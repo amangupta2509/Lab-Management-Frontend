@@ -1,7 +1,18 @@
 import { bookingAPI, usageAPI } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import { format, parseISO, isToday, parse } from "date-fns";
-ent_type: string;
+import { useEffect, useState } from "react";
+import {
+
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+interface UsageSession {
+  id: number;
+  booking_id: number;
+  equipment_name: string;
+  equipment_type: string;
   booking_date: string;
   start_time: string;
   end_time: string | null;
