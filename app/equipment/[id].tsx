@@ -6,7 +6,15 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 
 
-s, setBookedSlots] = useState<any[]>([]);
+
+eval new Date(),
+    purpose: "",
+  });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState<any[]>([]);
 
   useEffect(() => {
     loadEquipment();
