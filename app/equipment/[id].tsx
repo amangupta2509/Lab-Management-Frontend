@@ -5,35 +5,8 @@ import { format } from "date-fns";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
 
-export default function EquipmentDetailScreen() {
-  const { id } = useLocalSearchParams();
-  const [equipment, setEquipment] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showBookingModal, setShowBookingModal] = useState(false);
-  const [bookingData, setBookingData] = useState({
-    date: new Date(),
-    startTime: new Date(),
-    endTime: new Date(),
-    purpose: "",
-  });
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [bookedSlots, setBookedSlots] = useState<any[]>([]);
+s, setBookedSlots] = useState<any[]>([]);
 
   useEffect(() => {
     loadEquipment();
