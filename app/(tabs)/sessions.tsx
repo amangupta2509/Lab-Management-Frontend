@@ -5,7 +5,16 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-Load approved book bookingsResponse = await bookingAPI.getMyBookings({
+  FlatList,
+  Modal,
+  RefreshControl,
+  nd active session
+      const active = sessionsResponse.data.sessions.find(
+        (s: UsageSession) => !s.end_time
+      );
+      setActiveSession(active || null);
+
+      // Load approved book bookingsResponse = await bookingAPI.getMyBookings({
         status: "approved",
       });
 
