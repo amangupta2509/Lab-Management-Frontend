@@ -11,7 +11,18 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,;
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+interface UsageSession {
+  id: number;
+  booking_id: number;
+  equipment_name: string;
+  equipment_type: string;
+  booking_date: string;
+  start_time: string;
   end_time: string | null;
   duration_minutes: number | null;
   notes: string;
