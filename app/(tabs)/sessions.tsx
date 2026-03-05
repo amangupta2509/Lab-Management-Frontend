@@ -9,7 +9,19 @@ import {
   Modal,
   RefreshControl,
   ScrollView,
-  StyleShng;
+  StyleSheet,
+  Text,
+  TextInput,;
+  end_time: string | null;
+  duration_minutes: number | null;
+  notes: string;
+}
+
+interface AvailableBooking {
+  id: number;
+  equipment_name: string;
+  equipment_type: string;
+  booking_date: string;
   start_time: string;
   end_time: string;
 }
