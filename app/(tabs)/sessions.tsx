@@ -9,6 +9,14 @@ import {
   Modal,
   RefreshControl,
   ScrollView,
+  StyleShng;
+
+  useEffect(() => {
+    loadData();
+    // Refresh every minute to update available sessions
+    const interval = setInterval(loadData, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const loadData = async () => {
     try {
