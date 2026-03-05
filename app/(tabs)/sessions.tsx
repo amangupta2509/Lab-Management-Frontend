@@ -10,6 +10,13 @@ import {
   RefreshControl,
   ScrollView,
   StyleShng;
+  start_time: string;
+  end_time: string;
+}
+nst [refreshing, setRefreshing] = useState(false);
+  const [showStartModal, setShowStartModal] = useState(false);
+  const [showEndModal, setShowEndModal] = useState(false);
+  const [endNotes, setEndNotes] = useState("");
 
   useEffect(() => {
     loadData();
