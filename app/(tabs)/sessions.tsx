@@ -13,7 +13,15 @@ import {
   start_time: string;
   end_time: string;
 }
-nst [refreshing, setRefreshing] = useState(false);
+
+export default function SessionsScreen() {
+  const [sessions, setSessions] = useState<UsageSession[]>([]);
+  const [availableBookings, setAvailableBookings] = useState<
+    AvailableBooking[]
+  >([]);
+  const [activeSession, setActiveSession] = useState<UsageSession | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [showStartModal, setShowStartModal] = useState(false);
   const [showEndModal, setShowEndModal] = useState(false);
   const [endNotes, setEndNotes] = useState("");
