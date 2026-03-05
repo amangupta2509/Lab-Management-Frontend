@@ -5,71 +5,7 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  FlatList,
-  Modal,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-interface UsageSession {
-  id: number;
-  booking_id: number;
-  equipment_name: string;
-  equipment_type: string;
-  booking_date: string;
-  start_time: string;
-  end_time: string | null;
-  duration_minutes: number | null;
-  notes: string;
-}
-
-interface AvailableBooking {
-  id: number;
-  equipment_name: string;
-  equipment_type: string;
-  booking_date: string;
-  start_time: string;
-  end_time: string;
-}
-
-export default function SessionsScreen() {
-  const [sessions, setSessions] = useState<UsageSession[]>([]);
-  const [availableBookings, setAvailableBookings] = useState<
-    AvailableBooking[]
-  >([]);
-  const [activeSession, setActiveSession] = useState<UsageSession | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [showStartModal, setShowStartModal] = useState(false);
-  const [showEndModal, setShowEndModal] = useState(false);
-  const [endNotes, setEndNotes] = useState("");
-
-  useEffect(() => {
-    loadData();
-    // Refresh every minute to update available sessions
-    const interval = setInterval(loadData, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const loadData = async () => {
-    try {
-      // Load usage sessions
-      const sessionsResponse = await usageAPI.getMySessions();
-      setSessions(sessionsResponse.data.sessions);
-
-      // Find active session
-      const active = sessionsResponse.data.sessions.find(
-        (s: UsageSession) => !s.end_time
-      );
-      setActiveSession(active || null);
-
-      // Load approved bookings
-      const bookingsResponse = await bookingAPI.getMyBookings({
+Load approved book bookingsResponse = await bookingAPI.getMyBookings({
         status: "approved",
       });
 
