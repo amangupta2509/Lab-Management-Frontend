@@ -8,7 +8,15 @@ import {
   FlatList,
   Modal,
   RefreshControl,
-  nd active session
+  ScrollView,
+
+  const loadData = async () => {
+    try {
+      // Load usage sessions
+      const sessionsResponse = await usageAPI.getMySessions();
+      setSessions(sessionsResponse.data.sessions);
+
+      // Find active session
       const active = sessionsResponse.data.sessions.find(
         (s: UsageSession) => !s.end_time
       );
