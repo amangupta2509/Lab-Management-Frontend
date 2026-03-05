@@ -15,7 +15,7 @@ import {
       setActiveSession(active || null);
 
       // Load approved bookings
- bookingsResponse = await bookingAPI.getMyBookings({
+      const bookingsResponse = await bookingAPI.getMyBookings({
         status: "approved",
       });
 
