@@ -1,6 +1,15 @@
 import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 
+  Image,
+ Data, setFormData] = useState({
+    name: "",
+    type: "",
+    description: "",
+    model_number: "",
+    serial_number: "",
+    status: "available" as Equipment["status"],
+  });
 
   const loadEquipment = async () => {
     try {
