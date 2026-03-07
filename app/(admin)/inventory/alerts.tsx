@@ -1,3 +1,15 @@
+import { useEffect, useState } from "react";
+import {
+e: string;
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  is_resolved: boolean;
+  created_at: string;
+}
+
+export default function AlertsPage() {
+  const [alerts, setAlerts] = useState<InventoryAlert[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const loadAlerts = async () => {
     try {
