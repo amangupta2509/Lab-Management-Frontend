@@ -3,7 +3,13 @@ import {
   FlatList,
   Text,
   StyleSheet,
-  <Td></Td>rom "@expo/vector-icons";
+  TouchableOpacity,
+  ActivityIndicator,
+  View,
+  RefreshControl,
+  Alert,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import api from "@/lib/api";
 
 interface InventoryAlert {
