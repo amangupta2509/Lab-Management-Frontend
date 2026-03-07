@@ -4,7 +4,17 @@ import { Ionicons } from "@expo/vector-icons";
   Image,
   Modal,
 
-int
+interface Equipment {
+  id: number;
+  name: string;
+  type: string;
+  description: string;
+  model_number: string;
+  serial_number: string;
+  equipment_image: string;
+  status: "available" | "in_use" | "maintenance" | "deleted";
+}
+
 export default function AdminEquipmentScreen() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [filteredEquipment, setFilteredEquipment] = useState<Equipment[]>([]);
