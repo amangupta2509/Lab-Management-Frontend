@@ -1,43 +1,4 @@
-import { useEffect, useState } from "react";
-import {
-  FlatList,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  View,
-  RefreshControl,
-  Alert,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import api from "@/lib/api";
 
-interface InventoryAlert {
-  id: number;
-  item_name: string;
-  alert_message: string;
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
-  is_resolved: boolean;
-  created_at: string;
-}
-
-export default function AlertsPage() {
-  const [alerts, setAlerts] = useState<InventoryAlert[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const loadAlerts = async () => {
-    try {
-      const res = await api.get("/inventory/alerts");
-      console.log("📦 Alerts Response:", res.data);
-      setAlerts(res.data.alerts || []);
-    } catch (error: any) {
-      console.error("❌ Alerts Error:", error);
-      Alert.alert("Error", "Failed to load alerts");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
   };
 
   useEffect(() => {
