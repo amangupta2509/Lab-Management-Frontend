@@ -1,7 +1,17 @@
 import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 
-sLoading(false);
+
+  const loadEquipment = async () => {
+    try {
+      const response = await equipmentAPI.getAll();
+      setEquipment(response.data.equipment);
+      setFilteredEquipment(response.data.equipment);
+    } catch (error) {
+      console.error("Error loading equipment:", error);
+      Alert.alert("Error", "Failed to load equipment");
+    } finally {
+      setIsLoading(false);
       setRefreshing(false);
     }
   };
