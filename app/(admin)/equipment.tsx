@@ -2,7 +2,16 @@ import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 
   Image,
- Data, setFormData] = useState({
+  Modal,
+odal, setShowEditModal] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  );
+  const [isSaving, setIsSaving] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageChanged, setImageChanged] = useState(false); // Track if image was changed
+
+  const [formData, setFormData] = useState({
     name: "",
     type: "",
     description: "",
