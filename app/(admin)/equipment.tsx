@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
   Image,
   Modal,
 
-Infinity
+int
 export default function AdminEquipmentScreen() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [filteredEquipment, setFilteredEquipment] = useState<Equipment[]>([]);
