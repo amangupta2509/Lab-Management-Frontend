@@ -3,6 +3,14 @@ import { Ionicons } from "@expo/vector-icons";
 
   Image,
   Modal,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface Equipment {
   id: number;
