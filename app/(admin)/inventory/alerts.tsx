@@ -1,4 +1,16 @@
 
+  const loadAlerts = async () => {
+    try {
+      const res = await api.get("/inventory/alerts");
+      console.log("📦 Alerts Response:", res.data);
+      setAlerts(res.data.alerts || []);
+    } catch (error: any) {
+      console.error("❌ Alerts Error:", error);
+      Alert.alert("Error", "Failed to load alerts");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   };
 
   useEffect(() => {
