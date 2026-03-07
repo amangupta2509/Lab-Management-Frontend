@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import {
-e: string;
+  FlatList,
+  Text,
+  StyleSheet,
+  <Td></Td>rom "@expo/vector-icons";
+import api from "@/lib/api";
+
+interface InventoryAlert {
+  id: number;
+  item_name: string;
+  alert_message: string;
   severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   is_resolved: boolean;
   created_at: string;
