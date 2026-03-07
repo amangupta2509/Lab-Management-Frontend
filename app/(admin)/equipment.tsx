@@ -1,70 +1,7 @@
 import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
-import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  Image,
-  Modal,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
 
-interface Equipment {
-  id: number;
-  name: string;
-  type: string;
-  description: string;
-  model_number: string;
-  serial_number: string;
-  equipment_image: string;
-  status: "available" | "in_use" | "maintenance" | "deleted";
-}
-
-export default function AdminEquipmentScreen() {
-  const [equipment, setEquipment] = useState<Equipment[]>([]);
-  const [filteredEquipment, setFilteredEquipment] = useState<Equipment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
-    null
-  );
-  const [isSaving, setIsSaving] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [imageChanged, setImageChanged] = useState(false); // Track if image was changed
-
-  const [formData, setFormData] = useState({
-    name: "",
-    type: "",
-    description: "",
-    model_number: "",
-    serial_number: "",
-    status: "available" as Equipment["status"],
-  });
-
-  const loadEquipment = async () => {
-    try {
-      const response = await equipmentAPI.getAll();
-      setEquipment(response.data.equipment);
-      setFilteredEquipment(response.data.equipment);
-    } catch (error) {
-      console.error("Error loading equipment:", error);
-      Alert.alert("Error", "Failed to load equipment");
-    } finally {
-      setIsLoading(false);
+sLoading(false);
       setRefreshing(false);
     }
   };
