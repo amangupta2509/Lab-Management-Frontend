@@ -263,7 +263,19 @@ export default function AdminAnalyticsScreen() {
                     day: "numeric",
                   })}
                 </Text>
+                <Text style={styles.dayValue}>
+                  {Math.round(day.total_minutes / 60)}h
+                </Text>
+              </View>
 
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: "#f5f5f5",
+    alignItems: "center",
+  },
+  rangeButtonActive: {
     backgroundColor: "#E53935",
   },
 
