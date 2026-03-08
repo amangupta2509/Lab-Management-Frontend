@@ -246,7 +246,23 @@ export default function AdminAnalyticsScreen() {
               <Text style={styles.xAxisTitle}>Hour of Day</Text>
             </View>
           </View>
+        </View>
+      )}
 
+      {/* Daily Patterns */}
+      {dailyPatterns.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Daily Usage Patterns</Text>
+
+          {dailyPatterns.slice(0, 7).map((day: any) => (
+            <View key={day.usage_date} style={styles.dayCard}>
+              <View style={styles.dayHeader}>
+              })}
+    
+    padding: 16,
+    paddingTop: 33,
+    paddingBottom: 13,
+    gap: 2,
   },
 
   chartArea: {
