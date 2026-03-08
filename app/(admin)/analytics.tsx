@@ -262,7 +262,15 @@ export default function AdminAnalyticsScreen() {
                     month: "short",
                     day: "numeric",
                   })}
-    
+                </Text>
+
+    backgroundColor: "#E53935",
+  },
+
+  chartContainer: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 12,
     padding: 16,
     paddingTop: 33,
     paddingBottom: 13,
