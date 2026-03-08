@@ -272,7 +272,15 @@ export default function AdminAnalyticsScreen() {
                   <Ionicons name="people-outline" size={16} color="#666" />
                   <Text style={styles.dayStatText}>
                     {day.unique_users} users
-er: 
+er: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   rangeSelector: {
     flexDirection: "row",
     padding: 16,
