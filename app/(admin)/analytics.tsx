@@ -241,7 +241,18 @@ export default function AdminAnalyticsScreen() {
                       </Text>
                     </View>
                   ))}
-  
+                </View>
+              </View>
+              <Text style={styles.xAxisTitle}>Hour of Day</Text>
+            </View>
+          </View>
+
+  },
+
+  chartArea: {
+    flex: 1,
+  },
+  chartWithAxis: {
     flexDirection: "row",
     height: 150,
   },
