@@ -283,7 +283,11 @@ export default function AdminAnalyticsScreen() {
               </View>
             </View>
           ))}
-
+        </View>
+      )}
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
