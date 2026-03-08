@@ -267,7 +267,21 @@ export default function AdminAnalyticsScreen() {
                   {Math.round(day.total_minutes / 60)}h
                 </Text>
               </View>
-
+              <View style={styles.dayStats}>
+                <View style={styles.dayStat}>
+                  <Ionicons name="people-outline" size={16} color="#666" />
+                  <Text style={styles.dayStatText}>
+                    {day.unique_users} users
+er: 
+  rangeSelector: {
+    flexDirection: "row",
+    padding: 16,
+    gap: 12,
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+  },
+  rangeButton: {
     flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 16,
