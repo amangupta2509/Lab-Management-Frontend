@@ -257,7 +257,11 @@ export default function AdminAnalyticsScreen() {
           {dailyPatterns.slice(0, 7).map((day: any) => (
             <View key={day.usage_date} style={styles.dayCard}>
               <View style={styles.dayHeader}>
-              })}
+                <Text style={styles.dayDate}>
+                  {new Date(day.usage_date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
     
     padding: 16,
     paddingTop: 33,
