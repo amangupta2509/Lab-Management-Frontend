@@ -272,7 +272,21 @@ export default function AdminAnalyticsScreen() {
                   <Ionicons name="people-outline" size={16} color="#666" />
                   <Text style={styles.dayStatText}>
                     {day.unique_users} users
-er: {
+                  </Text>
+                </View>
+                <View style={styles.dayStat}>
+                  <Ionicons name="flash-outline" size={16} color="#666" />
+                  <Text style={styles.dayStatText}>
+                    {day.session_count} sessions
+                  </Text>
+                </View>
+              </View>
+            </View>
+          ))}
+
+
+const styles = StyleSheet.create({
+  container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
   },
