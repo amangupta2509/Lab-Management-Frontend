@@ -171,6 +171,10 @@ export const useAuthStore = create<AuthState>((set) => ({
         token,
         isAuthenticated: true,
         isLoading: false,
-   
+      });
+
+      console.log("Authentication verified for:", user.email);
+
+    }
   },
 }));
