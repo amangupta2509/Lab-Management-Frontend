@@ -177,7 +177,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
       console.log("Authentication check failed:", error);
       await removeToken();
-      s
+      set({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+        isLoading: false,
+      });
     }
   },
 }));
