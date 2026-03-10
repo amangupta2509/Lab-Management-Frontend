@@ -136,5 +136,33 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user: null,
         token: null,
+        isAuthenticated: false,
+        isLoading: false,
+      });
+      console.log("Logged out successfully");
+      router.replace("/(auth)/login");
+    }
+  },
 
+  clearError: () => set({ error: null }),
+
+  // 🔍 CHECK AUTH ON APP LOAD
+  checkAuth: async () => {
+    set({ isLoading: true });
+    try {
+      console.log("Checking authentication...");
+
+      // First, check if we have a token
+      const token = await SecureStore.getItemAsync("authToken");
+
+      if (!token) {
+        console.log("No token found");
+        throw new Error("No token found");
+      }
+
+      console.log("Token found, verifying...");
+nticated: true,
+        isLoading: false,
+   
+  },
 }));
