@@ -161,7 +161,15 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
 
       console.log("Token found, verifying...");
-nticated: true,
+
+      // Verify token with backend
+      const res = await authAPI.verifyToken();
+      const user = res.data.user;
+
+      set({
+        user,
+        token,
+        isAuthenticated: true,
         isLoading: false,
    
   },
