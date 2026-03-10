@@ -109,4 +109,32 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
 
       console.log("Registration successful, redirecting...");
+      router.replace("/(tabs)");
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Registration failed";
 
+      set({
+        error: errorMessage,
+        isLoading: false,
+      });
+      throw err;
+    }
+  },
+
+  // 🚪 LOGOUT
+  logout: async () => {
+    set({ isLoading: true });
+    try {
+      console.log("Logging out...");
+      await authAPI.logout();
+    } catch (e) {
+      console.warn("Logout API call failed:", e);
+    } finally {
+      await removeToken();
+      set({
+        user: null,
+        token: null,
+
+}));
