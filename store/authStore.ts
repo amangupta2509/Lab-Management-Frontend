@@ -174,7 +174,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
 
       console.log("Authentication verified for:", user.email);
-
+    } catch (error) {
+      console.log("Authentication check failed:", error);
+      await removeToken();
+      s
     }
   },
 }));
