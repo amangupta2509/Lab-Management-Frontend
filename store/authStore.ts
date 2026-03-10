@@ -76,4 +76,37 @@ export const useAuthStore = create<AuthState>((set) => ({
         error: errorMessage,
         isLoading: false,
       });
+      throw err;
+    }
+  },
+
+  // 📝 REGISTER
+  register: async (data) => {
+    set({ isLoading: true, error: null });
+    try {
+      console.log("Attempting registration for:", data.email);
+      const res = await authAPI.register(data);
+
+      console.log("Register response:", res.data);
+
+      // The backend returns { success: true, token: "...", user: {...} }
+      const token = res.data.token;
+      const user = res.data.user;
+
+      // Validate token
+      if (!token || typeof token !== "string") {
+        throw new Error("Invalid token received from server");
+      }
+
+      console.log("Saving token...");
+      await setToken(token);
+
+      set({
+        user,
+        token,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+
+      console.log("Registration successful, redirecting...");
 
