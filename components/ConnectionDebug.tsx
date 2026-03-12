@@ -281,7 +281,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
     margi
-  "#4CAF50",
+  refreshButton: {
+    backgroundColor: "#2196F3",
+  },
+  testButton: {
+    backgroundColor: "#4CAF50",
   },
   buttonText: {
     color: "#fff",
