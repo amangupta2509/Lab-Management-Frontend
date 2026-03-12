@@ -283,7 +283,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   button: {
-
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
   refreshButton: {
     backgroundColor: "#2196F3",
   },
