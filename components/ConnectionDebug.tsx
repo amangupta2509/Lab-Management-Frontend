@@ -280,7 +280,10 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     gap: 8,
-    margi
+    marginBottom: 16,
+  },
+  button: {
+
   refreshButton: {
     backgroundColor: "#2196F3",
   },
