@@ -280,22 +280,8 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     gap: 8,
-    marginBottom: 16,
-  },
-  button: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 6,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  refreshButton: {
-    backgroundColor: "#2196F3",
-  },
-  testButton: {
-    backgroundColor: "#4CAF50",
+    margi
+  "#4CAF50",
   },
   buttonText: {
     color: "#fff",
