@@ -23,7 +23,12 @@ interface Project {
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [get("/inventory/projects");
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadProjects = async () => {
+    try {
+      const res = await api.get("/inventory/projects");
       console.log("📦 Projects Response:", res.data);
       setProjects(res.data.projects || []);
     } catch (error: any) {
