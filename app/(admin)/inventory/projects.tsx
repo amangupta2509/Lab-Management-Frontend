@@ -20,7 +20,14 @@ interface Project {
   run_status: string;
   created_at: string;
 }
-Effect(() => {
+
+{
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
     loadProjects();
   }, []);
 
