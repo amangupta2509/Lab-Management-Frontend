@@ -16,7 +16,21 @@ interface Project {
   client_name: string;
   project_type: string;
   sample_size: number;
- 
+  library_status: string;
+  run_status: string;
+  created_at: string;
+}
+Effect(() => {
+    loadProjects();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    loadProjects();
+  };
+
+  if (loading) {
+    return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#E53935" />
         <Text style={styles.loadingText}>Loading projects...</Text>
