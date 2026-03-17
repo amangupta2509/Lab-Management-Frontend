@@ -21,7 +21,15 @@ interface Project {
   created_at: string;
 }
 
-{
+export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [get("/inventory/projects");
+      console.log("📦 Projects Response:", res.data);
+      setProjects(res.data.projects || []);
+    } catch (error: any) {
+      console.error("❌ Projects Error:", error);
+      Alert.alert("Error", "Failed to load projects");
+    } finally {
       setLoading(false);
       setRefreshing(false);
     }
