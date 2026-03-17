@@ -16,41 +16,7 @@ interface Project {
   client_name: string;
   project_type: string;
   sample_size: number;
-  library_status: string;
-  run_status: string;
-  created_at: string;
-}
-
-export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const loadProjects = async () => {
-    try {
-      const res = await api.get("/inventory/projects");
-      console.log("📦 Projects Response:", res.data);
-      setProjects(res.data.projects || []);
-    } catch (error: any) {
-      console.error("❌ Projects Error:", error);
-      Alert.alert("Error", "Failed to load projects");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
-
-  useEffect(() => {
-    loadProjects();
-  }, []);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadProjects();
-  };
-
-  if (loading) {
-    return (
+ 
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#E53935" />
         <Text style={styles.loadingText}>Loading projects...</Text>
