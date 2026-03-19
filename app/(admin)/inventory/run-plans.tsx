@@ -75,7 +75,23 @@ export default function RunPlans() {
             <Text style={styles.title}>{item.unique_run_id}</Text>
           </View>
 
-: "#388E3C" };
+          <View style={styles.divider} />
+
+          <View style={styles.infoRow}>
+            <Ionicons name="hardware-chip-outline" size={16} color="#666" />
+            <Text style={styles.meta}>Client: {item.client_name || "—"}</Text>
+            <Text style={styles.meta}>Project: {item.project_type || "—"}</Text>
+          </View>
+
+          <View style={styles.statusContainer}>
+
+  );
+}
+
+const getStatusColor = (status: string) => {
+  const s = status.toLowerCase();
+  if (s.includes("complete") || s.includes("pass")) {
+    return { color: "#388E3C" };
   }
   if (s.includes("progress") || s.includes("pending")) {
     return { color: "#FB8C00" };
