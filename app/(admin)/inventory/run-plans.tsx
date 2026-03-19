@@ -67,87 +67,8 @@ export default function RunPlans() {
       keyExtractor={(r) => r.id.toString()}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      renderItem={({ item }) => (
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Ionicons name="play-circle" size={24} color="#E53935" />
-            <Text style={styles.title}>{item.unique_run_id}</Text>
-          </View>
 
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <Ionicons name="hardware-chip-outline" size={16} color="#666" />
-            <Text style={styles.meta}>Client: {item.client_name || "—"}</Text>
-            <Text style={styles.meta}>Project: {item.project_type || "—"}</Text>
-          </View>
-
-          <View style={styles.statusContainer}>
-            <View style={styles.statusBadge}>
-              <Text style={styles.statusLabel}>QC:</Text>
-              <Text
-                style={[styles.statusValue, getStatusColor(item.qc_status)]}
-              >
-                {item.qc_status}
-              </Text>
-            </View>
-          </View>
-        </View>
-      )}
-      ListEmptyComponent={
-        <View style={styles.empty}>
-          <Ionicons name="play-circle-outline" size={64} color="#ccc" />
-          <Text style={styles.emptyText}>No run plans found</Text>
-          <Text style={styles.emptySubtext}>Run plans will appear here</Text>
-        </View>
-      }
-    />
-  );
-}
-
-const getStatusColor = (status: string) => {
-  const s = status.toLowerCase();
-  if (s.includes("complete") || s.includes("pass")) {
-    return { color: "#388E3C" };
-  }
-  if (s.includes("progress") || s.includes("pending")) {
-    return { color: "#FB8C00" };
-  }
-  if (s.includes("fail")) {
-    return { color: "#D32F2F" };
-  }
-  return { color: "#1976D2" };
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  content: {
-    padding: 16,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: "#666",
-  },
-  card: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 14,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+  load
     shadowRadius: 2,
   },
   cardHeader: {
