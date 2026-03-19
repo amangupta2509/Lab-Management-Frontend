@@ -67,7 +67,20 @@ export default function RunPlans() {
       keyExtractor={(r) => r.id.toString()}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      renderItem={({ item }) => (
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
 
+  if (s.includes("fail")) {
+    return { color: "#D32F2F" };
+  }
+  return { color: "#1976D2" };
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
     backgroundColor: "#f5f5f5",
   },
   content: {
