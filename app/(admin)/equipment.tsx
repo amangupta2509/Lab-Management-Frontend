@@ -1,6 +1,14 @@
 import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { rou
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface Equipment {
   id: number;
