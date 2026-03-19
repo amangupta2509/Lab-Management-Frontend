@@ -71,7 +71,15 @@ export default function RunPlans() {
       renderItem={({ item }) => (
         <View style={styles.card}>
           <View style={styles.cardHeader}>
+            <Ionicons name="play-circle" size={24} color="#E53935" />
+            <Text style={styles.title}>{item.unique_run_id}</Text>
+          </View>
 
+: "#388E3C" };
+  }
+  if (s.includes("progress") || s.includes("pending")) {
+    return { color: "#FB8C00" };
+  }
   if (s.includes("fail")) {
     return { color: "#D32F2F" };
   }
