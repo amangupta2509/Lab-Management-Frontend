@@ -84,7 +84,14 @@ export default function RunPlans() {
           </View>
 
           <View style={styles.statusContainer}>
-
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusLabel}>QC:</Text>
+              <Text
+                style={[styles.statusValue, getStatusColor(item.qc_status)]}
+              >
+                {item.qc_status}
+              </Text>
+            </View>
           </View>
         </View>
       )}
