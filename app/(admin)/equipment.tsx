@@ -1,7 +1,16 @@
 import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { rou
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Image,
+  Modal,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
