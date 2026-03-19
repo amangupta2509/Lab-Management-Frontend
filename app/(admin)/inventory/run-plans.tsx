@@ -85,6 +85,17 @@ export default function RunPlans() {
 
           <View style={styles.statusContainer}>
 
+          </View>
+        </View>
+      )}
+      ListEmptyComponent={
+        <View style={styles.empty}>
+          <Ionicons name="play-circle-outline" size={64} color="#ccc" />
+          <Text style={styles.emptyText}>No run plans found</Text>
+          <Text style={styles.emptySubtext}>Run plans will appear here</Text>
+        </View>
+      }
+    />
   );
 }
 
