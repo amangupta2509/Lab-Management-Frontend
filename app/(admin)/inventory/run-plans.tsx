@@ -68,7 +68,20 @@ export default function RunPlans() {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 
-  load
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: "#666",
+  },
+  card: {
+    backgroundColor: "#fff",
+    padding: 16,
+    borderRadius: 14,
+    marginBottom: 12,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
     shadowRadius: 2,
   },
   cardHeader: {
