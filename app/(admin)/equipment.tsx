@@ -2,6 +2,16 @@ import { equipmentAPI, getImageUrl } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
+interface Equipment {
+  id: number;
+  name: string;
+  type: string;
+  description: string;
+  model_number: string;
+  serial_number: string;
+  equipment_image: string;
+  status: "available" | "in_use" | "maintenance" | "deleted";
+}
 
 export default function AdminEquipmentScreen() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
