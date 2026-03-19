@@ -68,6 +68,17 @@ export default function RunPlans() {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 
+    backgroundColor: "#f5f5f5",
+  },
+  content: {
+    padding: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
   loadingText: {
     marginTop: 12,
     fontSize: 14,
