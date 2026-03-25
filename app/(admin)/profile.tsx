@@ -1,4 +1,8 @@
-
+or("Error loading profile:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleImagePick = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
