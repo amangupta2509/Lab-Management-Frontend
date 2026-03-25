@@ -1,7 +1,11 @@
 nst [showPasswordModal, setShowPasswordModal] = useState(false);
   const [editData, setEditData] = useState({
     name: "",
-    ntPassword: "",
+    phone: "",
+    department: "",
+  });
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
