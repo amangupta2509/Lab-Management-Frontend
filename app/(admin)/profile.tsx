@@ -1,6 +1,18 @@
 nst [showPasswordModal, setShowPasswordModal] = useState(false)isSaving, setIsSaving] = useState(false);
-{
 
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const response = await userAPI.getProfile();
+      setProfile(response.data);
+      setEditData({
+        name: response.data.user.name,
+        phone: response.data.user.phone || "",
+        department: response.data.user.department || "",
+      });
     } catch (error) {
       console.error("Error loading profile:", error);
     } finally {
