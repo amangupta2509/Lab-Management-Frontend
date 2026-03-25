@@ -1,4 +1,9 @@
-nst [showPasswordModal, setShowPasswordModal] = useState(false);
+import { useState, useEffect } from "react";
+import {
+const [profile, setProfile] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [editData, setEditData] = useState({
     name: "",
     phone: "",
