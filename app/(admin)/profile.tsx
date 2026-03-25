@@ -1,4 +1,5 @@
-nst [showPasswordModal, setShowPasswordModal] = useState(false)isSaving, setIsSaving] = useState(false);
+nst [showPasswordModal, setShowPasswordModal] = useState(false);
+isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     loadProfile();
