@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import {
   View,
   Text,
-
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Alert,
   ActivityIndicator,
   TextInput,
   Modal,
