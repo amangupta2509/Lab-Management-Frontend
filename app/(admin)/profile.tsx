@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import {
-const [profile, setProfile] = useState<any>(null);
+m "react-native";
+t default function AdminProfileScreen() {
+  const { user, logout, setUser } = useAuthStore();
+  const [profile, setProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
