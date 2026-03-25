@@ -1,4 +1,8 @@
-or("Error loading profile:", error);
+nst [showPasswordModal, setShowPasswordModal] = useState(false)isSaving, setIsSaving] = useState(false);
+{
+
+    } catch (error) {
+      console.error("Error loading profile:", error);
     } finally {
       setIsLoading(false);
     }
