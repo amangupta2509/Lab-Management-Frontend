@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import {
-m "react-native";
+  View,
+  Text,
+
+  ActivityIndicator,
+  TextInput,
+  Modal,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useAuthStore } from "@/store/authStore";
