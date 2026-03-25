@@ -1,65 +1,6 @@
-import { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Alert,
-  ActivityIndicator,
-  TextInput,
-  Modal,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
-import { useAuthStore } from "@/store/authStore";
-import { userAPI, getImageUrl } from "@/lib/api"; // ← Import getImageUrl
 
-export default function AdminProfileScreen() {
-  const { user, logout, setUser } = useAuthStore();
-  const [profile, setProfile] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [editData, setEditData] = useState({
-    name: "",
-    phone: "",
-    department: "",
-  });
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-  const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
 
-  const loadProfile = async () => {
-    try {
-      const response = await userAPI.getProfile();
-      setProfile(response.data);
-      setEditData({
-        name: response.data.user.name,
-        phone: response.data.user.phone || "",
-        department: response.data.user.department || "",
-      });
-    } catch (error) {
-      console.error("Error loading profile:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleImagePick = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permission Required", "Please grant photo library access");
-      return;
-    }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
