@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import {
 m "react-native";
-t default function AdminProfileScreen() {
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { useAuthStore } from "@/store/authStore";
+import { userAPI, getImageUrl } from "@/lib/api"; // ← Import getImageUrl
+
+export default function AdminProfileScreen() {
   const { user, logout, setUser } = useAuthStore();
   const [profile, setProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
