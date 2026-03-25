@@ -1,5 +1,11 @@
 nst [showPasswordModal, setShowPasswordModal] = useState(false);
-isSaving, setIsSaving] = useState(false);
+  const [editData, setEditData] = useState({
+    name: "",
+    ntPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     loadProfile();
