@@ -1,7 +1,15 @@
 i | "success" | "warning" | "error" | "approval" | "rejection";
   is_read: boolean;
   notifications, setNotifications] = useState<Notification[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [todayActivity, setTodayActivity] = useState<any>(null);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
+  const loadNotifications = async () => {
+    try {
       const response = await activityAPI.getNotifications();
       setNotifications(response.data.notifications);
     } catch (error) {
