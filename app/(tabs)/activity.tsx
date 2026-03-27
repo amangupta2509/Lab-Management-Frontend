@@ -2,7 +2,18 @@ i | "success" | "warning" | "error" | "approval" | "rejection";
   is_read: boolean;
   notifications, setNotifications] = useState<Notification[]>([]);
 
-console.error("Error marking notification as read:", error);
+ 
+kSignInStatus();
+  };
+
+  const markAsRead = async (id: number) => {
+    try {
+      await activityAPI.markNotificationRead(id);
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+      );
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
     }
   };
 
