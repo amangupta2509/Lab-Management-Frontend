@@ -1,4 +1,12 @@
-i | "success" | "warning" | "error" | "approval" | "rejection";
+import { activityAPI } from "@/lib/api";
+import { Ionicons } from "@expo/vector-icons";
+import {ve";
+
+interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  type: "info" | "success" | "warning" | "error" | "approval" | "rejection";
   is_read: boolean;
   created_at: string;
   related_booking_id?: number;
