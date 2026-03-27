@@ -2,7 +2,14 @@ i | "success" | "warning" | "error" | "approval" | "rejection";
   is_read: boolean;
   notifications, setNotifications] = useState<Notification[]>([]);
 
- 
+      const response = await activityAPI.getNotifications();
+      setNotifications(response.data.notifications);
+    } catch (error) {
+      console.error("Error loading notifications:", error);
+    } finally {
+      setIsLoading(false);
+      setRefreshing(false);
+    }
   };
 
   useEffect(() => {
