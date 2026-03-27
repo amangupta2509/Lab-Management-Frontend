@@ -3,7 +3,18 @@ i | "success" | "warning" | "error" | "approval" | "rejection";
   notifications, setNotifications] = useState<Notification[]>([]);
 
 console.error("Error marking notification as read:", error);
-  
+    }
+  };
+
+  const checkSignInStatus = async () => {
+    try {
+      const response = await activityAPI.getMyActivity();
+
+      // Just find any OPEN session (no sign_out_time)
+      const openSession = response.data.activities.find(
+        (a: any) => !a.sign_out_time
+      );
+
       setIsSignedIn(!!openSession);
       setTodayActivity(openSession || null);
 
