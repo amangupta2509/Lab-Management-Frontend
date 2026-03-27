@@ -1,6 +1,11 @@
 i | "success" | "warning" | "error" | "approval" | "rejection";
   is_read: boolean;
-  notifications, setNotifications] = useState<Notification[]>([]);
+  created_at: string;
+  related_booking_id?: number;
+}
+
+export default function ActivityScreen() {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<"all" | "unread">("all");
