@@ -3,7 +3,18 @@ i | "success" | "warning" | "error" | "approval" | "rejection";
   n
  (response.data.activity) {
           setIsSignedIn(true);
-    SigningIn(false);
+          setTodayActivity(response.data.activity);
+        } else {
+          await checkSignInStatus();
+        }
+      }
+    } catch (error: any) {
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Failed to sign in to lab"
+      );
+    } finally {
+      setIsSigningIn(false);
     }
   };
 
