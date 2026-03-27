@@ -3,7 +3,17 @@ i | "success" | "warning" | "error" | "approval" | "rejection";
   notifications, setNotifications] = useState<Notification[]>([]);
 
  
-kSignInStatus();
+  };
+
+  useEffect(() => {
+    loadNotifications();
+    checkSignInStatus();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    loadNotifications();
+    checkSignInStatus();
   };
 
   const markAsRead = async (id: number) => {
