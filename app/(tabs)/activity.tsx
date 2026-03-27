@@ -2,7 +2,12 @@ import { activityAPI } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
 import { format, isToday, isYesterday } from "date-fns";
 import { useEffect, useState } from "react";
-
+import {
+  ActivityIndicator,
+  Alert,
+  RefreshControl,
+  SectionList,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
