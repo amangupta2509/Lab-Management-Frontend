@@ -1,5 +1,20 @@
 i | "success" | "warning" | "error" | "approval" | "rejection";
-  is  await activityAPI.signOut();
+  is_read: boolean;
+  n
+ (response.data.activity) {
+          setIsSignedIn(true);
+    SigningIn(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    Alert.alert("Sign Out", "Are you sure you want to sign out of the lab?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Sign Out",
+        onPress: async () => {
+          try {
+            await activityAPI.signOut();
             setIsSignedIn(false);
             setTodayActivity(null);
             Alert.alert("Success", "Signed out successfully");
