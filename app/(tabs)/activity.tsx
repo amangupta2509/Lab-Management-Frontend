@@ -1,6 +1,20 @@
 i | "success" | "warning" | "error" | "approval" | "rejection";
   is_read: boolean;
-  n
+  notifications, setNotifications] = useState<Notification[]>([]);
+
+console.error("Error marking notification as read:", error);
+  
+      setIsSignedIn(!!openSession);
+      setTodayActivity(openSession || null);
+
+      console.log("📊 Sign-in status check:", {
+        isSignedIn: !!openSession,
+        openSession,
+      });
+    } catch (error) {
+      console.error("Error checking sign-in status:", error);
+    }
+  };
 
   const handleSignIn = async () => {
     if (isSigningIn) return;
