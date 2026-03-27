@@ -1,7 +1,19 @@
 i | "success" | "warning" | "error" | "approval" | "rejection";
   is_read: boolean;
   n
- (response.data.activity) {
+
+  const handleSignIn = async () => {
+    if (isSigningIn) return;
+
+    setIsSigningIn(true);
+    try {
+      const response = await activityAPI.signIn();
+
+      if (response.data.success) {
+        Alert.alert("Success", response.data.message);
+
+        // 🔥 ADD THIS
+        if (response.data.activity) {
           setIsSignedIn(true);
           setTodayActivity(response.data.activity);
         } else {
