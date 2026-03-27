@@ -1,6 +1,12 @@
 import { activityAPI } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
-import {ve";
+import { format, isToday, isYesterday } from "date-fns";
+import { useEffect, useState } from "react";
+
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface Notification {
   id: number;
