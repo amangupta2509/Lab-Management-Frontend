@@ -120,3 +120,11 @@ export default function ProjectsPage() {
 }
 
 const getStatusColor = (status: string) => {
+  const s = status.toLowerCase();
+  if (s.includes("complete") || s.includes("done")) {
+    return { color: "#388E3C" };
+  }
+  i
+  return { color: "#1976D2" };
+};
+
