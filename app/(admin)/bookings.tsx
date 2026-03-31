@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import {
   View,
   Tex
-
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import { bookingAPI } from "@/lib/api";
 import { format } from "date-fns";
 
 interface Booking {
