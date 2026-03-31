@@ -5,7 +5,13 @@ interface Booking {
   purpose: string;
   status: "pending" | "approved" | "rejected" | "cancelled" | "completed";
   remarks?: string;
-  crte(true);
+  created_at: string;
+}
+
+export default function AdminBookingsScreen() {
+  const [allBookings, setAllBookings] = useState<Booking[]>([]);
+  const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>("pending");
   const [showReviewModal, setShowReviewModal] = useState(false);
