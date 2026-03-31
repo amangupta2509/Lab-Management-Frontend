@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import {
   View,
-  Tex
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
+  Alert,
+  Modal,
+  TextInput,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { KeyboardAvoidingView, Platform } from "react-native";
