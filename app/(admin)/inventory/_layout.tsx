@@ -6,7 +6,8 @@ export default function InventoryLayout() {
       screenOptions={{
         headerShown: false,
       }}
-     />
+    >
+ />
       <Stack.Screen name="consumption" />
     </Stack>
   );
