@@ -1,7 +1,13 @@
 
 interface Booking {
   id: number;
-
+  user_name: string;
+  user_email: string;
+  equipment_name: string;
+  equipment_type: string;
+  booking_date: string;
+  start_time: string;
+  end_time: string;
   purpose: string;
   status: "pending" | "approved" | "rejected" | "cancelled" | "completed";
   remarks?: string;
