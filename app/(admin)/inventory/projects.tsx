@@ -128,3 +128,102 @@ const getStatusColor = (status: string) => {
   return { color: "#1976D2" };
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+  content: {
+    padding: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: "#666",
+  },
+  card: {
+    backgroundColor: "#fff",
+    padding: 16,
+    borderRadius: 14,
+    marginBottom: 12,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  cardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 12,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#212121",
+    flex: 1,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#e0e0e0",
+    marginBottom: 12,
+  },
+  metaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  meta: {
+    color: "#555",
+    fontSize: 14,
+    flex: 1,
+  },
+  statusContainer: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  statusBadge: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+    padding: 8,
+    borderRadius: 8,
+    gap: 6,
+  },
+  statusLabel: {
+    fontSize: 12,
+    color: "#666",
+    fontWeight: "600",
+  },
+  statusValue: {
+    fontSize: 12,
+    fontWeight: "600",
+    flex: 1,
+  },
+  empty: {
+    alignItems: "center",
+    paddingVertical: 64,
+    paddingHorizontal: 32,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#999",
+    marginTop: 16,
+    fontWeight: "600",
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: "#bbb",
+    marginTop: 8,
+    textAlign: "center",
+  },
+});
