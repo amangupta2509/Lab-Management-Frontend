@@ -1,41 +1,11 @@
-import { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-  RefreshControl,
-  Alert,
-  Modal,
-  TextInput,
-  ScrollView,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import { bookingAPI } from "@/lib/api";
-import { format } from "date-fns";
 
 interface Booking {
   id: number;
-  user_name: string;
-  user_email: string;
-  equipment_name: string;
-  equipment_type: string;
-  booking_date: string;
-  start_time: string;
-  end_time: string;
+
   purpose: string;
   status: "pending" | "approved" | "rejected" | "cancelled" | "completed";
   remarks?: string;
-  created_at: string;
-}
-
-export default function AdminBookingsScreen() {
-  const [allBookings, setAllBookings] = useState<Booking[]>([]);
-  const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  crte(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>("pending");
   const [showReviewModal, setShowReviewModal] = useState(false);
