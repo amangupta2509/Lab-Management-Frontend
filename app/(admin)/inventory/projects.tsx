@@ -124,7 +124,9 @@ const getStatusColor = (status: string) => {
   if (s.includes("complete") || s.includes("done")) {
     return { color: "#388E3C" };
   }
-  i
+  if (s.includes("progress") || s.includes("pending")) {
+    return { color: "#FB8C00" };
+  }
   return { color: "#1976D2" };
 };
 
