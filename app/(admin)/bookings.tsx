@@ -143,22 +143,7 @@ export default function AdminBookingsScreen() {
     );
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "approved":
-        return { bg: "#e8f5e9", text: "#4caf50" };
-      case "pending":
-        return { bg: "#fff3e0", text: "#ff9800" };
-      case "rejected":
-        return { bg: "#ffebee", text: "#f44336" };
-      case "cancelled":
-        return { bg: "#f5f5f5", text: "#9e9e9e" };
-      case "completed":
-        return { bg: "#e3f2fd", text: "#2196F3" };
-      default:
-        return { bg: "#f5f5f5", text: "#9e9e9e" };
-    }
-  };
+
 
   const getStatusIcon = (status: string) => {
     switch (status) {
