@@ -2,132 +2,16 @@ import { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import api from "@/lib/api";
-
-export default function Consumption() {
-  const [form, setForm] = useState({
-    project_id: "",
-    inventory_type: "",
-    item_id: "",
-    quantity: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const submit = async () => {
-    // Validation
-    if (
-      !form.project_id ||
-      !form.inventory_type ||
-      !form.item_id ||
-      !form.quantity
-    ) {
-      Alert.alert("Required", "Please fill in all fields");
-      return;
-    }
-
-    if (isNaN(Number(form.quantity)) || Number(form.quantity) <= 0) {
-      Alert.alert("Invalid", "Quantity must be a positive number");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await api.post("/inventory/consume", {
-        project_id: Number(form.project_id),
-        inventory_type: form.inventory_type.toUpperCase(),
-        item_id: Number(form.item_id),
-        quantity: Number(form.quantity),
-      });
-
-      Alert.alert("Success", "Inventory consumed successfully");
-
-      // Reset form
-      setForm({
-        project_id: "",
-        inventory_type: "",
-        item_id: "",
-        quantity: "",
-      });
-    } catch (error: any) {
-      console.error("❌ Consumption Error:", error);
-      Alert.alert(
-        "Error",
-        error.response?.data?.message || "Failed to consume inventory"
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <Ionicons name="link" size={32} color="#E53935" />
-        <Text style={styles.headerTitle}>Consumption Mapping</Text>
-        <Text style={styles.headerSubtitle}>
-          Link inventory usage to specific projects
-        </Text>
-      </View>
-
-      <View style={styles.form}>
-        <Text style={styles.label}>Project ID *</Text>
-        <TextInput
-          placeholder="Enter project ID"
-          style={styles.input}
-          placeholderTextColor="#999"
-          value={form.project_id}
-          onChangeText={(v) => setForm({ ...form, project_id: v })}
-          keyboardType="numeric"
-          editable={!isSubmitting}
-        />
-
-        <Text style={styles.label}>Inventory Type *</Text>
-        <TextInput
-          placeholder="LAB or NGS"
-          style={styles.input}
-          placeholderTextColor="#999"
-          value={form.inventory_type}
-          onChangeText={(v) => setForm({ ...form, inventory_type: v })}
-          autoCapitalize="characters"
-          editable={!isSubmitting}
-        />
-
-        <Text style={styles.label}>Item ID *</Text>
-        <TextInput
-          placeholder="Enter item ID"
-          style={styles.input}
-          placeholderTextColor="#999"
-          value={form.item_id}
+  StyleShe
+importem_id}
           onChangeText={(v) => setForm({ ...form, item_id: v })}
-          keyboardType="numeric"
-          editable={!isSubmitting}
-        />
-
-        <Text style={styles.label}>Quantity *</Text>
-        <TextInput
-          placeholder="Enter quantity to consume"
-          keyboardType="numeric"
-          style={styles.input}
-          placeholderTextColor="#999"
-          value={form.quantity}
+        orm.quantity}
           onChangeText={(v) => setForm({ ...form, quantity: v })}
           editable={!isSubmitting}
         />
 
         <TouchableOpacity
-          style={[styles.submit, isSubmitting && styles.submitDisabled]}
-          onPress={submit}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
+          bmitting ? (
             <ActivityIndicator color="#fff" />
           ) : (
             <>
