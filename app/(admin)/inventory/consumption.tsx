@@ -5,7 +5,13 @@ import {
   StyleShe
 import { Ionicons } from "@expo/vector-icons";
 import api ",
-    item_id: "
+    item_id: "",
+    quantity: "",
+  })
+      !form.project_id ||
+      !form.inventory_type ||
+      !form.item_id ||
+      !form.quantity
     ) {
       Alert.alert("Required", "Please fill in all fields");
       return;
