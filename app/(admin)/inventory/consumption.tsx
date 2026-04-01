@@ -7,7 +7,12 @@ import { Ionicons } from "@expo/vector-icons";
 import api ",
     item_id: "",
     quantity: "",
-  })
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submit = async () => {
+    // Validation
+    if (
       !form.project_id ||
       !form.inventory_type ||
       !form.item_id ||
