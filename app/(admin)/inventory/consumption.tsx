@@ -5,13 +5,27 @@ import {
   StyleShe
 importem_id}
           onChangeText={(v) => setForm({ ...form, item_id: v })}
-        orm.quantity}
+          keyboardType="numeric"
+          editable={!isSubmitting}
+        />
+
+        <Text style={styles.label}>Quantity *</Text>
+        <TextInput
+          placeholder="Enter quantity to consume"
+          keyboardType="numeric"
+          style={styles.input}
+          placeholderTextColor="#999"
+          value={form.quantity}
           onChangeText={(v) => setForm({ ...form, quantity: v })}
           editable={!isSubmitting}
         />
 
         <TouchableOpacity
-          bmitting ? (
+          style={[styles.submit, isSubmitting && styles.submitDisabled]}
+          onPress={submit}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
             <ActivityIndicator color="#fff" />
           ) : (
             <>
