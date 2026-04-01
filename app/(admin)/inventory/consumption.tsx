@@ -5,6 +5,16 @@ import {
   StyleShe
 import { IQuantity must be a positive number");
       return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await api.post("/inventory/consume", {
+        project_id: Number(form.project_id),
+        inventory_type: form.inventory_type.toUpperCase(),
+        item_id: Number(form.item_id),
+        quantity: Number(form.quantity),
+      });
 
       Alert.alert("Success", "Inventory consumed successfully");
 
