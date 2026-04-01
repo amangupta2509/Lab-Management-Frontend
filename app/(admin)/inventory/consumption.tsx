@@ -2,7 +2,13 @@ import { useState } from "react";
 import {
   View,
   Text,
-  StyleShe
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import api from "@/lib/api";
 
