@@ -3,7 +3,20 @@ import {
   View,
   Text,
   StyleShe
-importem_id}
+import { IQuant
+      </View>ect_id}
+          entory_type}
+          onChangeText={(v) => setForm({ ...form, inventory_type: v })}
+          autoCapitalize="characters"
+          editable={!isSubmitting}
+        />
+
+        <Text style={styles.label}>Item ID *</Text>
+        <TextInput
+          placeholder="Enter item ID"
+          style={styles.input}
+          placeholderTextColor="#999"
+          value={form.item_id}
           onChangeText={(v) => setForm({ ...form, item_id: v })}
           keyboardType="numeric"
           editable={!isSubmitting}
