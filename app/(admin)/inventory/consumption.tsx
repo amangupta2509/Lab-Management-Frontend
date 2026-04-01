@@ -5,6 +5,15 @@ import {
   StyleShe
 import { IQuantity must be a positive number");
       return;
+
+      Alert.alert("Success", "Inventory consumed successfully");
+
+      // Reset form
+      setForm({
+        project_id: "",
+        inventory_type: "",
+        item_id: "",
+        quantity: "",
       });
     } catch (error: any) {
       console.error("❌ Consumption Error:", error);
