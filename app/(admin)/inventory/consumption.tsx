@@ -3,7 +3,18 @@ import {
   View,
   Text,
   StyleShe
-import { IQuant
+import { IQuanti
+    }
+  };
+
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <View style={styles.header}>
+        <Ionicons name="link" size={32} color="#E53935" />
+        <Text style={styles.headerTitle}>Consumption Mapping</Text>
+        <Text style={styles.headerSubtitle}>
+          Link inventory usage to specific projects
+        </Text>
       </View>
 
       <View style={styles.form}>
