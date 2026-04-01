@@ -5,7 +5,17 @@ import {
   StyleShe
 import { IQuant
       </View>ect_id}
-          entory_type}
+          onChangeText={(v) => setForm({ ...form, project_id: v })}
+          keyboardType="numeric"
+          editable={!isSubmitting}
+        />
+
+        <Text style={styles.label}>Inventory Type *</Text>
+        <TextInput
+          placeholder="LAB or NGS"
+          style={styles.input}
+          placeholderTextColor="#999"
+          value={form.inventory_type}
           onChangeText={(v) => setForm({ ...form, inventory_type: v })}
           autoCapitalize="characters"
           editable={!isSubmitting}
