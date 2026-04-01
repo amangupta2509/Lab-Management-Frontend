@@ -3,7 +3,17 @@ import {
   View,
   Text,
   StyleShe
-import { IQuanti
+import { IQuantity must be a positive number");
+      return;
+      });
+    } catch (error: any) {
+      console.error("❌ Consumption Error:", error);
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Failed to consume inventory"
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
