@@ -4,7 +4,15 @@ import {
   Text,
   StyleShe
 import { IQuant
-      </View>ect_id}
+      </View>
+
+      <View style={styles.form}>
+        <Text style={styles.label}>Project ID *</Text>
+        <TextInput
+          placeholder="Enter project ID"
+          style={styles.input}
+          placeholderTextColor="#999"
+          value={form.project_id}
           onChangeText={(v) => setForm({ ...form, project_id: v })}
           keyboardType="numeric"
           editable={!isSubmitting}
