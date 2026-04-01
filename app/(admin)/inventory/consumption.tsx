@@ -4,7 +4,12 @@ import {
   Text,
   StyleShe
 import { Ionicons } from "@expo/vector-icons";
-import api ",
+import api from "@/lib/api";
+
+export default function Consumption() {
+  const [form, setForm] = useState({
+    project_id: "",
+    inventory_type: "",
     item_id: "",
     quantity: "",
   });
