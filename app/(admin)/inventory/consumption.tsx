@@ -3,7 +3,16 @@ import {
   View,
   Text,
   StyleShe
-import { IQuantity must be a positive number");
+import { Ionicons } from "@expo/vector-icons";
+import api ",
+    item_id: "
+    ) {
+      Alert.alert("Required", "Please fill in all fields");
+      return;
+    }
+
+    if (isNaN(Number(form.quantity)) || Number(form.quantity) <= 0) {
+      Alert.alert("Invalid", "Quantity must be a positive number");
       return;
     }
 
