@@ -9,7 +9,11 @@ import { labInventoryAPI } from "@/lib/inventoryApi";
 
 interface LabInventoryItem {
   id: number;
-  item
+  item_name: string;
+  category: string;
+  current_stock: number;
+  minimum_stock: number;
+  unit: string;
   location?: string;
   reorder_status: "OK" | "LOW" | "REORDER_REQUIRED";
 }
