@@ -65,7 +65,15 @@ export default function LabInventory() {
     setFormData({
       item_name: item.item_name,
 al(false);
-"Cancel" },
+      loadData();
+    } catch (error: any) {
+      Alert.alert("Error", error.response?.data?.message || "Failed to save item");
+    }
+  };
+
+  const handleDelete = (item: LabInventoryItem) => {
+    Alert.alert("Delete Item", `Delete "${item.item_name}"?`, [
+      { text: "Cancel" },
       {
         text: "Delete",
         style: "destructive",
