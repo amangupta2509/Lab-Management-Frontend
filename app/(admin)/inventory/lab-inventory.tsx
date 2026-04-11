@@ -73,6 +73,13 @@ export default function LabInventory() {
     setShowModal(true);
   };
 
+  const handleSave = async () => {
+    if (!formData.item_name || !formData.category || !formData.current_stock) {
+      Alert.alert("Required", "Please fill in all required fields");
+      return;
+    }
+
+    try {
       const payload = {
         item_name: formData.item_name,
         category: formData.category,
