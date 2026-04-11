@@ -14,7 +14,12 @@ interface LabInventoryItem {
   reorder_status: "OK" | "LOW" | "REORDER_REQUIRED";
 }
 
-setFormData] = useState({
+export default function LabInventory() {
+  const [data, setData] = useState<LabInventoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [editingItem, setEditingItem] = useState<LabInventoryItem | null>(null);
+  const [formData, setFormData] = useState({
     item_name: "",
     category: "",
     current_stock: "",
