@@ -9,21 +9,12 @@ import { labInventoryAPI } from "@/lib/inventoryApi";
 
 interface LabInventoryItem {
   id: number;
-  item_name: string;
-  category: string;
-  current_stock: number;
-  minimum_stock: number;
-  unit: string;
+  item
   location?: string;
   reorder_status: "OK" | "LOW" | "REORDER_REQUIRED";
 }
 
-export default function LabInventory() {
-  const [data, setData] = useState<LabInventoryItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [editingItem, setEditingItem] = useState<LabInventoryItem | null>(null);
-  const [formData, setFormData] = useState({
+setFormData] = useState({
     item_name: "",
     category: "",
     current_stock: "",
