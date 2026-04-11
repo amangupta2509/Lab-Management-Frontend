@@ -2,7 +2,18 @@ import { useEffect, useState } from "react";
 import {
   View, Text, FlatList, StyleSheet,
   TouchableOpacity, Alert, ActivityIndicator,
+  Modal, TextInput, ScrollView
 
+interface LabInventoryItem {
+  id: number;
+  item_name: string;
+  category: string;
+  current_stock: number;
+  minimum_stock: number;
+  unit: string;
+  location?: string;
+  reorder_status: "OK" | "LOW" | "REORDER_REQUIRED";
+}
 
 export default function LabInventory() {
   const [data, setData] = useState<LabInventoryItem[]>([]);
