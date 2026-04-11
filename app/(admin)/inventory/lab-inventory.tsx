@@ -64,49 +64,8 @@ export default function LabInventory() {
     setEditingItem(item);
     setFormData({
       item_name: item.item_name,
-      category: item.category,
-      current_stock: item.current_stock.toString(),
-      minimum_stock: item.minimum_stock.toString(),
-      unit: item.unit,
-      location: item.location || "",
-    });
-    setShowModal(true);
-  };
-
-  const handleSave = async () => {
-    if (!formData.item_name || !formData.category || !formData.current_stock) {
-      Alert.alert("Required", "Please fill in all required fields");
-      return;
-    }
-
-    try {
-      const payload = {
-        item_name: formData.item_name,
-        category: formData.category,
-        current_stock: parseFloat(formData.current_stock),
-        minimum_stock: parseFloat(formData.minimum_stock || "0"),
-        unit: formData.unit,
-        location: formData.location,
-      };
-
-      if (editingItem) {
-        await labInventoryAPI.update(editingItem.id, payload);
-        Alert.alert("Success", "Item updated successfully");
-      } else {
-        await labInventoryAPI.create(payload);
-        Alert.alert("Success", "Item added successfully");
-      }
-
-      setShowModal(false);
-      loadData();
-    } catch (error: any) {
-      Alert.alert("Error", error.response?.data?.message || "Failed to save item");
-    }
-  };
-
-  const handleDelete = (item: LabInventoryItem) => {
-    Alert.alert("Delete Item", `Delete "${item.item_name}"?`, [
-      { text: "Cancel" },
+al(false);
+"Cancel" },
       {
         text: "Delete",
         style: "destructive",
