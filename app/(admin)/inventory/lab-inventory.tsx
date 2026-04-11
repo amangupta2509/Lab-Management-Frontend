@@ -70,7 +70,16 @@ export default function LabInventory() {
       unit: item.unit,
       location: item.location || "",
     });
-n: formData.location,
+    setShowModal(true);
+  };
+
+      const payload = {
+        item_name: formData.item_name,
+        category: formData.category,
+        current_stock: parseFloat(formData.current_stock),
+        minimum_stock: parseFloat(formData.minimum_stock || "0"),
+        unit: formData.unit,
+        location: formData.location,
       };
 
       if (editingItem) {
