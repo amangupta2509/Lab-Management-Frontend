@@ -3,6 +3,9 @@ import {
   View, Text, FlatList, StyleSheet,
   TouchableOpacity, Alert, ActivityIndicator,
   Modal, TextInput, ScrollView
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { labInventoryAPI } from "@/lib/inventoryApi";
 
 interface LabInventoryItem {
   id: number;
