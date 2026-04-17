@@ -275,7 +275,16 @@ export default function AdminAnalyticsScreen() {
                   </Text>
                 </View>
                 <View style={styles.dayStat}>
-
+                  <Ionicons name="flash-outline" size={16} color="#666" />
+                  <Text style={styles.dayStatText}>
+                    {day.session_count} sessions
+                  </Text>
+                </View>
+              </View>
+            </View>
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 }
