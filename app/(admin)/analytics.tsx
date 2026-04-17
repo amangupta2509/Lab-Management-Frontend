@@ -271,7 +271,12 @@ export default function AdminAnalyticsScreen() {
 
 
 
-
+  hourLabel: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 2,
+    fontWeight: "500",
+  },
   xAxisTitle: {
     fontSize: 12,
     color: "#999",
