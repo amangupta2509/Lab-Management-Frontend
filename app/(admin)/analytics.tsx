@@ -270,7 +270,12 @@ export default function AdminAnalyticsScreen() {
               <View style={styles.dayStats}>
 
 
-
+  hourBarFill: {
+    width: "100%",
+    backgroundColor: "#E53935",
+    borderRadius: 4,
+    minHeight: 4,
+  },
   hourLabel: {
     fontSize: 12,
     color: "#666",
