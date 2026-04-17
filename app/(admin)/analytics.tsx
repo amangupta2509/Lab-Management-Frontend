@@ -271,6 +271,13 @@ export default function AdminAnalyticsScreen() {
 
 
 
+
+
+  rangeButtonText: {
+    fontSize: 14,
+    color: "#666",
+    fontWeight: "600",
+  },
   rangeButtonTextActive: {
     color: "#fff",
   },
