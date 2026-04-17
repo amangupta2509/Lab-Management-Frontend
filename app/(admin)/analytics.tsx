@@ -271,6 +271,11 @@ export default function AdminAnalyticsScreen() {
                 <View style={styles.dayStat}>
                   <Ionicons name="people-outline" size={16} color="#666" />
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
