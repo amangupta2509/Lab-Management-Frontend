@@ -270,6 +270,11 @@ export default function AdminAnalyticsScreen() {
               <View style={styles.dayStats}>
                 <View style={styles.dayStat}>
 
+  alertSubtext: {
+    fontSize: 10,
+    color: "#999",
+    marginTop: 2,
+  },
 
   hourlyChart: {
     flex: 1,
