@@ -273,6 +273,12 @@ export default function AdminAnalyticsScreen() {
                   <Text style={styles.dayStatText}>
                     {day.unique_users} users
                   </Text>
+                </View>
+                <View style={styles.dayStat}>
+
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
