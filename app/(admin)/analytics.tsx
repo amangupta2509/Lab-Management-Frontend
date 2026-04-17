@@ -272,6 +272,9 @@ export default function AdminAnalyticsScreen() {
                   <Ionicons name="people-outline" size={16} color="#666" />
 
 
+  rangeButtonActive: {
+    backgroundColor: "#E53935",
+  },
 
   chartContainer: {
     flexDirection: "row",
