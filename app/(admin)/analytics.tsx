@@ -268,7 +268,18 @@ export default function AdminAnalyticsScreen() {
                 </Text>
               </View>
               <View style={styles.dayStats}>
+                <View style={styles.dayStat}>
 
+
+  hourlyChart: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 2,
+    paddingLeft: 2,
+    paddingBottom: 8,
+    paddingRight: 4,
+  },
   hourBar: {
     flex: 1,
     alignItems: "center",
