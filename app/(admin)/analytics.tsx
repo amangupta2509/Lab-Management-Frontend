@@ -270,6 +270,9 @@ export default function AdminAnalyticsScreen() {
               <View style={styles.dayStats}>
                 <View style={styles.dayStat}>
                   <Ionicons name="people-outline" size={16} color="#666" />
+                  <Text style={styles.dayStatText}>
+                    {day.unique_users} users
+                  </Text>
 
 const styles = StyleSheet.create({
   container: {
