@@ -271,7 +271,14 @@ export default function AdminAnalyticsScreen() {
                 <View style={styles.dayStat}>
                   <Ionicons name="people-outline" size={16} color="#666" />
 
-
+  rangeButton: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: "#f5f5f5",
+    alignItems: "center",
+  },
   rangeButtonActive: {
     backgroundColor: "#E53935",
   },
