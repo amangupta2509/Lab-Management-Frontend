@@ -270,6 +270,15 @@ export default function AdminAnalyticsScreen() {
               <View style={styles.dayStats}>
                 <View style={styles.dayStat}>
 
+
+  chartArea: {
+    flex: 1,
+  },
+  chartWithAxis: {
+    flexDirection: "row",
+    height: 150,
+  },
+
   alertSubtext: {
     fontSize: 10,
     color: "#999",
