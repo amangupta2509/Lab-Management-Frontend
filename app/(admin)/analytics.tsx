@@ -269,6 +269,11 @@ export default function AdminAnalyticsScreen() {
               </View>
               <View style={styles.dayStats}>
 
+
+
+  rangeButtonTextActive: {
+    color: "#fff",
+  },
   section: {
     padding: 16,
   },
