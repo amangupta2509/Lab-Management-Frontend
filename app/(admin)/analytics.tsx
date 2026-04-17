@@ -272,7 +272,13 @@ export default function AdminAnalyticsScreen() {
 
 
 
-
+  xAxisTitle: {
+    fontSize: 12,
+    color: "#999",
+    textAlign: "center",
+    marginTop: 4,
+    fontWeight: "600",
+  },
   rangeButtonText: {
     fontSize: 14,
     color: "#666",
