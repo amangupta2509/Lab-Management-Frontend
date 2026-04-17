@@ -269,7 +269,19 @@ export default function AdminAnalyticsScreen() {
               </View>
               <View style={styles.dayStats}>
                 <View style={styles.dayStat}>
+                  <Ionicons name="people-outline" size={16} color="#666" />
 
+
+
+  chartContainer: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    paddingTop: 33,
+    paddingBottom: 13,
+    gap: 2,
+  },
 
   chartArea: {
     flex: 1,
