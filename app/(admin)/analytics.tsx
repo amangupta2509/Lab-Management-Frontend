@@ -269,7 +269,10 @@ export default function AdminAnalyticsScreen() {
               </View>
               <View style={styles.dayStats}>
 
-
+  hourBar: {
+    flex: 1,
+    alignItems: "center",
+  },
   hourBarFill: {
     width: "100%",
     backgroundColor: "#E53935",
