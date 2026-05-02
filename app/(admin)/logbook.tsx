@@ -1,4 +1,11 @@
-[isLoading, setIsLoading] = useState(true);
+ort * as Sharing from "expo-sharing";
+: string;
+}
+
+export default function AdminLogbookScreen() {
+  const [logbook, setLogbook] = useState<LogbookEntry[]>([]);
+  const [filteredLogbook, setFilteredLogbook] = useState<LogbookEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filterType, setFilterType] = useState<string>("all");
 
