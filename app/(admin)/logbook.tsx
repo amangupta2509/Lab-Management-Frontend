@@ -1,5 +1,13 @@
 
- 
+  const applyFilters = () => {
+    if (filterType === "all") {
+      setFilteredLogbook(logbook);
+    } else {
+      setFilteredLogbook(
+        logbook.filter((entry) => entry.activity_type === filterType)
+      );
+    }
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
