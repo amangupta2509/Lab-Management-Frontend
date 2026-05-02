@@ -1,5 +1,12 @@
 [isLoading, setIsLoading] = useState(true);
-  cons
+  const [refreshing, setRefreshing] = useState(false);
+  const ToPicker, setShowDateToPicker] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  useEffect(() => {
+    loadLogbook();
+  }, [dateFrom, dateTo]);
+
   useEffect(() => {
     applyFilters();
   }, [filterType, logbook]);
