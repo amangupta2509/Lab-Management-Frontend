@@ -1,6 +1,18 @@
 
  
-gbook.length === 0) {
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    loadLogbook();
+  };
+
+  const clearDateFilters = () => {
+    setDateFrom(null);
+    setDateTo(null);
+  };
+
+  const exportToCSV = async () => {
+    if (filteredLogbook.length === 0) {
       Alert.alert("No Data", "No logbook entries to export");
       return;
     }
