@@ -1,5 +1,12 @@
 ort * as Sharing from "expo-sharing";
-: string;
+
+interface LogbookEntry {
+  id: number;
+  user_name: string;
+  equipment_name?: string;
+  activity_type: string;
+  description: string;
+  created_at: string;
 }
 
 export default function AdminLogbookScreen() {
