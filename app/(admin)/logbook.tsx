@@ -2,7 +2,18 @@
  FEFF";
 
       // Create well-formatted CSV header
-      .user_name.replace(/"/g, '""'); // Escape quotes
+      const csvHeader =
+        "Date,Time,Day of Week,Activity Type,User Name,Equipment,Description\n";
+
+      // Create CSV rows with proper formatting
+      const csvRows = filteredLogbook
+        .map((entry) => {
+          const entryDate = new Date(entry.created_at);
+          const date = format(entryDate, "yyyy-MM-dd");
+          const time = format(entryDate, "HH:mm:ss");
+          const dayOfWeek = format(entryDate, "EEEE"); // Full day name
+          const activityType = getActivityLabel(entry.activity_type);
+          const user = entry.user_name.replace(/"/g, '""'); // Escape quotes
           const equipment = (entry.equipment_name || "N/A").replace(/"/g, '""');
           const description = entry.description
             .replace(/"/g, '""')
