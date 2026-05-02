@@ -1,4 +1,10 @@
- setLogbook(response.data.logbook);
+[isLoading, setIsLoading] = useState(true);
+f (dateTo) {
+        params.date_to = format(dateTo, "yyyy-MM-dd");
+      }
+
+      const response = await adminAPI.getLabLogbook(params);
+      setLogbook(response.data.logbook);
       applyFilters();
     } catch (error) {
       console.error("Error loading logbook:", error);
