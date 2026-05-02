@@ -1,3 +1,8 @@
+ finally {
+      setIsLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   const applyFilters = () => {
     if (filterType === "all") {
