@@ -1,6 +1,12 @@
 [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const ToPicker, setShowDateToPicker] = useState(false);
+  const [filterType, setFilterType] = useState<string>("all");
+
+  // Date filter states
+  const [dateFrom, setDateFrom] = useState<Date | null>(null);
+  const [dateTo, setDateTo] = useState<Date | null>(null);
+  const [showDateFromPicker, setShowDateFromPicker] = useState(false);
+  const [showDateToPicker, setShowDateToPicker] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
