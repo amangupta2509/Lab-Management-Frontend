@@ -1,5 +1,12 @@
 [isLoading, setIsLoading] = useState(true);
-f (dateTo) {
+  cons
+  useEffect(() => {
+    applyFilters();
+  }, filters if set
+      if (dateFrom) {
+        params.date_from = format(dateFrom, "yyyy-MM-dd");
+      }
+      if (dateTo) {
         params.date_to = format(dateTo, "yyyy-MM-dd");
       }
 
