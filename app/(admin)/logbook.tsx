@@ -1,5 +1,14 @@
 
- FEFF";
+ 
+gbook.length === 0) {
+      Alert.alert("No Data", "No logbook entries to export");
+      return;
+    }
+
+    setIsExporting(true);
+    try {
+      // Create CSV with UTF-8 BOM for Excel compatibility
+      const BOM = "\uFEFF";
 
       // Create well-formatted CSV header
       const csvHeader =
