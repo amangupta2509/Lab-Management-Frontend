@@ -1,4 +1,9 @@
- finally {
+ setLogbook(response.data.logbook);
+      applyFilters();
+    } catch (error) {
+      console.error("Error loading logbook:", error);
+      Alert.alert("Error", "Failed to load logbook");
+    } finally {
       setIsLoading(false);
       setRefreshing(false);
     }
