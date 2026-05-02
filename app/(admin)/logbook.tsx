@@ -2,7 +2,13 @@
   cons
   useEffect(() => {
     applyFilters();
-  }, filters if set
+  }, [filterType, logbook]);
+
+  const loadLogbook = async () => {
+    try {
+      const params: any = {};
+
+      // Add date filters if set
       if (dateFrom) {
         params.date_from = format(dateFrom, "yyyy-MM-dd");
       }
